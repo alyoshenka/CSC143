@@ -1,7 +1,7 @@
 import java.time.LocalDate;
 
 /**
- * A STanley's Storage Storage Unit
+ * A Stanley's Storage Storage Unit
  *
  * @author Alexi Most
  * @version 1
@@ -21,10 +21,10 @@ public class Unit
     private int height;
     /** the customer this unit belongs to */
     private Customer customer;
-    /** the price this uit was rented at */
-    private double rentedPrice;
-    /** the standard price for a unit */
-    private double standardPrice; // DO I NEED?
+    /** the standard price for the unit */
+    private double standardPrice;
+    /** the price this unit was rented at */
+    private double rentedPrice; 
     /** the date the unit was rented on */
     private LocalDate date;
 
@@ -34,15 +34,21 @@ public class Unit
      * @param _type     the type of unit
      * @param _width    the width of the unit
      * @param _length   the length of the unit
-     * @param _customer the customer renting this unit
      */
-    public Unit(Type _type, int _width, int _length, int _height, Customer _customer)
+    public Unit(Type _type, int _width, int _length, int _height, double _standardPrice)
     {
+        // validate dimensions
+        if(_width % 4 != 0 || _length % 4 != 0 || _height % 2 != 0){
+            throw new IllegalArgumentException("width and height must be multiples of 4, height must be a multiple of 2");
+        }
+            
         type = _type;
         width = _width;
         length = _length;
         height = _height;
-        customer = _customer;   
+        standardPrice = _standardPrice;
+        customer = null;   
+        // price = 0.0; // no price until it is rented
         date = LocalDate.now();
     }
 
@@ -83,11 +89,21 @@ public class Unit
     }
     
     /**
+     * gets the last date the unit was rented on
+     * if the unit has not been rented, returns the initialization date
+     * 
+     * @return rental date
+     */
+    LocalDate getRentalDate(){
+        return date;
+    }
+    
+    /**
      * gets the Customer associated with the unit
      * 
      * @return the customer renting this unit
      */
-    public Customer getCustomer(){ // String??
+    public Customer getCustomer(){ 
         return customer;
     }
     
@@ -97,7 +113,12 @@ public class Unit
      * @return the rented price
      */
     public Double getPrice(){
-        return rentedPrice;
+        if(customer == null){
+            return standardPrice;
+        }
+        else{
+            return rentedPrice;
+        }
     }
     
     /**
@@ -105,18 +126,18 @@ public class Unit
      * 
      * @param _customer the customer
      * @param _date     the date rented
-     * @param price     the price it was rented for
+     * @param _rentedPrice     the price it was rented for
      */
-    public void rentUnit(Customer _customer, LocalDate _date, double price){
+    public void rentUnit(Customer _customer, LocalDate _date, double _rentedPrice){
         customer = _customer;
         date = _date;
-        rentedPrice = price;
+        rentedPrice = _rentedPrice;
     }
     
     /** 
      * unrents the unit
      */
-    public void releaseUnit(){ // do any more???
+    public void releaseUnit(){
         customer = null;
     }
     
@@ -127,6 +148,6 @@ public class Unit
      */
     public String toString(){
         return type + ", " + width + "x" + length + "x" + height + ", " + customer.toString() 
-            + ", $" + rentedPrice + ", " + date;
+            + ", $" + standardPrice + ", $" + rentedPrice + ", " + date;
     }
 }

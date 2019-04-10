@@ -13,11 +13,16 @@ import org.junit.Test;
  */
 public class CustomerTest
 {
+    Customer testCustomer;
+    double VARIANCE;
+    
     /**
      * Default constructor for test class CustomerTest
      */
     public CustomerTest()
     {
+        testCustomer = new Customer("Alexi Most", 0001112222);
+        VARIANCE = 0.00001;
     }
 
     /**
@@ -41,9 +46,57 @@ public class CustomerTest
     }
     
     /**
-     * Test constructors and Gets 
+     * Test Constructor and Gets 
      */
-    public void ConstructorsAndGets(){
-        Customer customer = new Customer("Alexi Most", 0001112222);
+    @Test
+    public void constructorsAndGets(){
+        assertEquals("Alexi Most", testCustomer.getName());
+        assertEquals(0001112222, testCustomer.getPhone());                
+    }
+    
+    
+    /**
+     * Tests phone validation
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testPhoneValidation(){
+        Customer customer = new Customer("Alexi Most", 000);
+    }
+    
+    
+    /**
+     * Tests charge validation
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void chargeValid(){
+        testCustomer.charge(-0.1);
+    }
+    
+    
+    /**
+     * Tests credit validation
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void creditValid(){
+        testCustomer.credit(-0.1);
+    }
+    
+    
+    /**
+     * tests charging and crediting
+     */
+    @Test
+    public void testMoney(){
+        testCustomer.charge(5.0);
+        testCustomer.credit(3.5);
+        assertEquals(1.5, testCustomer.getDebt(), VARIANCE);
+    }
+    
+    
+    /**
+     * Displays string representation for visual appraisal
+     */
+    public void testString(){
+        System.out.println(testCustomer.toString());
     }
 }

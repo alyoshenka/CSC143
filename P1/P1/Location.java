@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 public class Location
 {
     /** the array resize value when the number of customers exceeds array size */
-    private static int RESIZE_VALUE; // static????
+    private static int RESIZE_VALUE;
     /** the number of rows of units */
     private static int ROWS;
     /** the number of columns of units */
@@ -27,7 +27,10 @@ public class Location
     /**
      * Constructor for objects of class Location
      * 
-     * @param _name the name of this location  // CONVENTIONS HERE
+     * @param _name the name of this location 
+     *      Name must start with 2 capital letters for state abbreviation
+     *      This must be folllowed by 2 digit area number
+     *      This must be followed with city name, capitalized
      */
     public Location(String _name)
     {
@@ -43,6 +46,21 @@ public class Location
         units = new Unit[COLUMNS][ROWS];
         
         customerCount = 0;
+        
+        // initialize units
+        for(int col = 0; col < COLUMNS; col++){
+            for(int row = 0; row < ROWS; row++){
+                if(row >=8){
+                    units[col][row] = new Unit(Unit.Type.standard, 4, 8, 2, 10.0);
+                }
+                else if(row >= 4){
+                    units[col][row] = new Unit(Unit.Type.humidityControlled, 4, 8, 2, 10.0);
+                }
+                else{
+                    units[col][row] = new Unit(Unit.Type.temperatureControlled, 4, 8, 2, 10.0);
+                }
+            }
+        }
     }
     
     
@@ -52,7 +70,9 @@ public class Location
      * @param _name the attemped name
      */
     private void validateName(String _name){
-        // HOW WILL THIS HANDLE IF LEN < 5??
+        if(_name.length() < 5){
+            throw new IllegalArgumentException("Name does not fulfill parameters, not long enough");
+        }
         
         if(! _name.substring(0, 1).matches("[A-Z]")){
             throw new IllegalArgumentException("First two characters must be capitals indicating state");
@@ -76,7 +96,11 @@ public class Location
      * resizes the customer array if it exceeds bounds
      */    
     private void resizeCustomersArray(){
-        // ALLOCTE NEW SPACE
+        Customer newCustomers[] = new Customer[customers.length + RESIZE_VALUE];
+        for(int i = 0; i < customers.length; i++){
+            newCustomers[i] = customers[i];
+        }
+        customers = newCustomers;
     }
     
     
@@ -98,7 +122,7 @@ public class Location
      * 
      * @return unit     the unit at the given index
      */
-    public Unit getUnit(int row, int column){
+    public Unit getUnit(int column, int row){
         return units[column][row];
     }
     

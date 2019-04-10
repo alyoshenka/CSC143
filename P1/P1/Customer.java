@@ -19,24 +19,14 @@ public class Customer{
      * @param _phone phone number
      */
     public Customer(String _name, int _phone){
-        validateName(_name);
-        validatePhone(_phone);
+        
+        // no validation for name, customers can name themselves however they want
+        
+        // validatePhone(_phone);
         name = _name;
         phone = _phone;
         debt = 0.0;
-    }
-    
-    /**
-     * Validates customer name
-     * 
-     * @param _name the name to validate
-     */
-    private void validateName(String _name){
-        if(! _name.matches("[A-Za-z/p{Punct}")){
-            throw new IllegalArgumentException("Invalid name."+
-                " Name can only include a-z, A-Z, and standard punctuation !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~");
-        }
-    }
+    }  
     
     
     /**
@@ -60,6 +50,7 @@ public class Customer{
         return name;
     }
     
+    
     /**
      * Gets customer phone number
      * 
@@ -68,6 +59,7 @@ public class Customer{
     public int getPhone(){
         return phone;
     }
+    
     
     /**
      * Charges customer a given amount
@@ -82,12 +74,13 @@ public class Customer{
         debt += amount;
     }
     
+    
     /**
      * Credits customer a given amount
      * 
      * @param payment amount
      */
-     public void credit(int amount){
+     public void credit(double amount){
          if(amount < 0){
             throw new IllegalArgumentException("cannot charge negative");
         }
@@ -97,6 +90,16 @@ public class Customer{
             // cannot owe customer money
         }
     }
+    
+    /**
+     * gets the amount owed by the Customer
+     * 
+     * @return Customer's debt 
+     */
+    public double getDebt(){
+        return debt;
+    }
+    
     
     /**
      * Makes string representation of object

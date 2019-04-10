@@ -9,27 +9,20 @@
  */
 public class StanleyStorage
 {
-    // instance variables - replace the example below with your own
-    private int x;
 
     /**
      * Constructor for objects of class StanleyStorage
      */
-    public StanleyStorage()
-    {
-        // initialise instance variables
-        x = 0;
+    public StanleyStorage(){
+        
     }
 
     /**
-     * An example of a method - replace this comment with your own
+     * Main application method
      *
-     * @param  y  a sample parameter for a method
-     * @return    the sum of x and y
+     * @param  args command-line arguments
      */
-    public int sampleMethod(int y)
-    {
-        // put your code here
-        return x + y;
+    public static void Main(){
+ 
     }
 }
