@@ -47,8 +47,8 @@ public class Unit
         length = _length;
         height = _height;
         standardPrice = _standardPrice;
-        customer = null;   
-        // price = 0.0; // no price until it is rented
+        customer = null; // no customer until it is rented  
+        rentedPrice = 0.0; // no price until it is rented
         date = LocalDate.now();
     }
 

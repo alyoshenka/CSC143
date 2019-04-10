@@ -60,7 +60,7 @@ public class CustomerTest
      */
     @Test(expected = IllegalArgumentException.class)
     public void testPhoneValidation(){
-        Customer customer = new Customer("Alexi Most", 000);
+        Customer customer = new Customer("Alexi Most", 987);
     }
     
     

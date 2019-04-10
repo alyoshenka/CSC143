@@ -16,13 +16,13 @@ public class Customer{
      * Constructor for objects of class Customer
      * 
      * @param _name customer name
-     * @param _phone phone number
+     * @param _phone phone number, must be 10 digits
      */
     public Customer(String _name, int _phone){
         
         // no validation for name, customers can name themselves however they want
         
-        // validatePhone(_phone);
+        validatePhone(_phone);
         name = _name;
         phone = _phone;
         debt = 0.0;
@@ -34,8 +34,10 @@ public class Customer{
      * 
      * @param _phone the phone number to validate
      */
-    private void validatePhone(int _phone){        
-        if(! Integer.toString(_phone).matches("[0-9]{10}")){
+    private void validatePhone(int _phone){ 
+        
+        String phoneString = Integer.toString(_phone);
+        if(phoneString.length() != 10 && ! phoneString.matches("[0-9]+")){
             throw new IllegalArgumentException("Invalid phone. Must be 10 digits");
         }
     }
@@ -60,6 +62,24 @@ public class Customer{
         return phone;
     }
     
+    /**
+     * sets customer name
+     * 
+     * @param _name the Customer's new name
+     */
+    public void setName(String _name){
+        name = _name;
+    }
+    
+    /** 
+     * sets the customer phone number, must still follow phone number guidelines
+     * 
+     * @param _phone the new phone number
+     */
+    public void setPhone(int _phone){
+        validatePhone(_phone);
+        phone = _phone;
+    }
     
     /**
      * Charges customer a given amount

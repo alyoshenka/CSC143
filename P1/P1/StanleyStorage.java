@@ -23,6 +23,6 @@ public class StanleyStorage
      * @param  args command-line arguments
      */
     public static void Main(){
- 
+           
     }
 }

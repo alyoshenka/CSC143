@@ -7,13 +7,19 @@ import java.time.LocalDate;
 /**
  * The test class LocationTest.
  *
- * @author  (your name)
- * @version (a version number or a date)
+ * @author  Alexi Most
+ * @version 1
  */
 public class LocationTest
 {
     /** Location to test with */
     private Location testLocation;
+    /** Customers to test with */
+    Customer johnDoe;
+    Customer alexiMost;
+    Customer jimDandy;
+    /** double allowance */
+    private static double ALLOWANCE;
     
     /**
      * Default constructor for test class LocationTest
@@ -21,6 +27,10 @@ public class LocationTest
     public LocationTest()
     {
         testLocation = new Location("WA01Seattle");
+        ALLOWANCE = 0.00001;
+        johnDoe = new Customer("John Doe", 0001112222);
+        alexiMost = new Customer("Alexi Most", 0001112222);
+        jimDandy = new Customer("Jim Dandy", 0000000000);
     }
 
     /**
@@ -56,7 +66,7 @@ public class LocationTest
      * tests name validation
      */
     @Test(expected = IllegalArgumentException.class)
-    public void testGetters(){
+    public void testVaidation(){
         Location badNameLocation = new Location("badName");
     }
     
@@ -71,21 +81,22 @@ public class LocationTest
      * tests methods relating to customers
      */
     @Test
-    public void testCustomers(){
+    public void testCustomers(){       
+        
         // adding a new customer
-        testLocation.addCustomer(new Customer("John Doe", 0001112222));
+        testLocation.addCustomer(johnDoe);
         // checking customer count
         assertEquals(1, testLocation.getCustomerCount());
+        
         // checking getting units of type
             // no units have been specifically rented, so nothing should come up
-        assertEquals(0, testLocation.getUnits(new Customer("John Doe", 0001112222), Unit.Type.standard));
+        assertEquals(240, (testLocation.getUnits(null, null)).length);
             // there should be (4 * 20 = ) 80 locations of each type
-        assertEquals(80, testLocation.getUnits(null, Unit.Type.standard));
+        assertEquals(80, (testLocation.getUnits(null, Unit.Type.standard)).length);
             // rent units 
-        Customer jimDandy = new Customer("Jim Dandy", 0000000000);
-        testLocation.getUnit(0, 0).rentUnit(jimDandy, LocalDate.now(), 10.1);
-        testLocation.getUnit(0, 1).rentUnit(jimDandy, LocalDate.now(), 10.1);
-        assertEquals(2, testLocation.getUnits(jimDandy, null));
+        testLocation.getUnit(0, 0).rentUnit(johnDoe, LocalDate.now(), 10.1);
+        testLocation.getUnit(0, 1).rentUnit(johnDoe, LocalDate.now(), 10.1);
+        assertEquals(2, (testLocation.getUnits(johnDoe, null)).length);
     }
     
     
@@ -96,13 +107,13 @@ public class LocationTest
     public void testResizingCustomers(){
         
         // fill array
-        for(int i = testLocation.getCustomerCount() - 1; i < 100; i++){
-            testLocation.addCustomer(new Customer("Alexi Most", 0001112222));
+        for(int i = testLocation.getCustomerCount() - 1; i < 99; i++){
+            testLocation.addCustomer(alexiMost);
         }
         
-        // push over limt of resizing
-        testLocation.addCustomer(new Customer("Jane Doe", 0001112222));
-        assertEquals("Jane Doe", testLocation.getCustomer(100).getName());
+        // push over limit of resizing
+        testLocation.addCustomer(johnDoe);
+        assertEquals(johnDoe, testLocation.getCustomer(100));
     } 
     
     /**
@@ -110,6 +121,19 @@ public class LocationTest
      */
     @Test
     public void testChargingRent(){
+        Unit rentingUnit = testLocation.getUnit(0, 2);
+        Unit rentingUnit2 = testLocation.getUnit(0, 3);
+        double testPrice = 3.4;
+
+        // rent unit with standard price
+        rentingUnit.rentUnit(jimDandy, LocalDate.now(), rentingUnit.getPrice());
+        // rent unit with given price
+        rentingUnit2.rentUnit(jimDandy, LocalDate.now(), testPrice);
+        
+        testLocation.chargeMonthlyRent();
+        
+        // customer's balance should now be equal to unit price
+        assertEquals(rentingUnit.getPrice() + testPrice, jimDandy.getDebt(), ALLOWANCE);
         
     }
 }
