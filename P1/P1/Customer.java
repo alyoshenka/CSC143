@@ -15,7 +15,7 @@ public class Customer{
     /**
      * Constructor for objects of class Customer
      * 
-     * @param _name customer name
+     * @param _name customer name, customers can name themselves however they want
      * @param _phone phone number, must be 10 digits
      */
     public Customer(String _name, int _phone){
@@ -35,9 +35,7 @@ public class Customer{
      * @param _phone the phone number to validate
      */
     private void validatePhone(int _phone){ 
-        
-        String phoneString = Integer.toString(_phone);
-        if(phoneString.length() != 10 && ! phoneString.matches("[0-9]+")){
+        if(_phone < 0){
             throw new IllegalArgumentException("Invalid phone. Must be 10 digits");
         }
     }

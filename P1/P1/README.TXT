@@ -4,9 +4,9 @@ Tell the reader (someone who does not know anything about this project)
 all he/she needs to know. The comments should usually include at least:
 ------------------------------------------------------------------------
 
-PROJECT TITLE:
-PURPOSE OF PROJECT:
-VERSION or DATE:
+PROJECT TITLE: Stanley Storage
+PURPOSE OF PROJECT: CSC143
+VERSION or DATE: 4/10/2019
 HOW TO START THIS PROJECT:
-AUTHORS:
+AUTHORS: ALexi Most
 USER INSTRUCTIONS:

@@ -28,9 +28,9 @@ public class LocationTest
     {
         testLocation = new Location("WA01Seattle");
         ALLOWANCE = 0.00001;
-        johnDoe = new Customer("John Doe", 0001112222);
-        alexiMost = new Customer("Alexi Most", 0001112222);
-        jimDandy = new Customer("Jim Dandy", 0000000000);
+        johnDoe = new Customer("John Doe",      0001112222);
+        alexiMost = new Customer("Alexi Most",  0001112222);
+        jimDandy = new Customer("Jim Dandy",    0001112222);
     }
 
     /**

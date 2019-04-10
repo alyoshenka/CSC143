@@ -144,10 +144,11 @@ public class Unit
     /**
      * gets a string representation of the object
      * 
-     * @return String   the string representation of the unit
+     * @return String the string representation of the unit
      */
     public String toString(){
-        return type + ", " + width + "x" + length + "x" + height + ", " + customer.toString() 
+        String customerString = customer == null ? "none" : customer.toString();
+        return type + ", " + width + "x" + length + "x" + height + ", Customer: " +  customerString
             + ", $" + standardPrice + ", $" + rentedPrice + ", " + date;
     }
 }

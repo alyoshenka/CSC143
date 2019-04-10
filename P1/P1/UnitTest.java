@@ -97,4 +97,11 @@ public class UnitTest
         assertEquals(null, testUnit.getCustomer());
     }
     
+    /**
+     * rests dimension validation
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testValidation(){
+        Unit testUnit2 = new Unit(Unit.Type.standard, 5, 4, 2, 0.0);
+    }
 }

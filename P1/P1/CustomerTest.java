@@ -60,7 +60,7 @@ public class CustomerTest
      */
     @Test(expected = IllegalArgumentException.class)
     public void testPhoneValidation(){
-        Customer customer = new Customer("Alexi Most", 987);
+        Customer customer = new Customer("Alexi Most", -1);
     }
     
     
@@ -90,13 +90,5 @@ public class CustomerTest
         testCustomer.charge(5.0);
         testCustomer.credit(3.5);
         assertEquals(1.5, testCustomer.getDebt(), VARIANCE);
-    }
-    
-    
-    /**
-     * Displays string representation for visual appraisal
-     */
-    public void testString(){
-        System.out.println(testCustomer.toString());
-    }
+    }    
 }
