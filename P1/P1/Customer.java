@@ -8,35 +8,48 @@ import java.util.regex.Matcher;
  * @version 1
  */
 public class Customer{
+    /** the customers name */
     private String name;
-    private int phone;
+    /** the customers phone number */
+    private String phone;
+    /** the amount the customer owes stanleys' storage */
     private double debt; 
 
     /**
      * Constructor for objects of class Customer
      * 
-     * @param _name customer name, customers can name themselves however they want
-     * @param _phone phone number, must be 10 digits
+     * @param name customer name, customers can name themselves however they want
+     * @param phone phone number, must be 10 digits
      */
-    public Customer(String _name, int _phone){
+    public Customer(String name, String phone){
         
-        // no validation for name, customers can name themselves however they want
-        
-        validatePhone(_phone);
-        name = _name;
-        phone = _phone;
+        validateName(name);
+        validatePhone(phone);
+
+        this.name = name;
+        this.phone = phone;
         debt = 0.0;
-    }  
-    
-    
+    }
+
+    /**
+     * validates customer name
+     *
+     * @param newName attempted name
+     */
+    private void validateName(String newName){
+        if(newName == null || newName.length() < 1){
+            throw new IllegalArgumentException("name length must be > 1 and not null");
+        }
+    }
+
     /**
      * Validates customer phone
      * 
-     * @param _phone the phone number to validate
+     * @param phone the phone number to validate
      */
-    private void validatePhone(int _phone){ 
-        if(_phone < 0){
-            throw new IllegalArgumentException("Invalid phone. Must be 10 digits");
+    private void validatePhone(String phone){  // test
+        if(! phone.matches("[0-9]{10}")){
+            throw new IllegalArgumentException("phone must be 10 digits");
         }
     }
     
@@ -56,33 +69,33 @@ public class Customer{
      * 
      * @return phone number
      */
-    public int getPhone(){
+    public String getPhone(){
         return phone;
     }
     
     /**
      * sets customer name
      * 
-     * @param _name the Customer's new name
+     * @param name the Customer's new name
      */
-    public void setName(String _name){
-        name = _name;
+    public void setName(String name){
+        this.name = name;
     }
     
     /** 
      * sets the customer phone number, must still follow phone number guidelines
      * 
-     * @param _phone the new phone number
+     * @param phone the new phone number
      */
-    public void setPhone(int _phone){
-        validatePhone(_phone);
-        phone = _phone;
+    public void setPhone(String phone){
+        validatePhone(phone);
+        this.phone = phone;
     }
     
     /**
      * Charges customer a given amount
      * 
-     * @param charge amount
+     * @param amount the amount to charge
      */
     public void charge(double amount){
         if(amount < 0){
@@ -96,7 +109,7 @@ public class Customer{
     /**
      * Credits customer a given amount
      * 
-     * @param payment amount
+     * @param amount the amount the customer pays
      */
      public void credit(double amount){
          if(amount < 0){

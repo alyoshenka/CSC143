@@ -21,7 +21,7 @@ public class CustomerTest
      */
     public CustomerTest()
     {
-        testCustomer = new Customer("Alexi Most", 0001112222);
+        testCustomer = new Customer("Alexi Most", "0001112222");
         VARIANCE = 0.00001;
     }
 
@@ -60,7 +60,7 @@ public class CustomerTest
      */
     @Test(expected = IllegalArgumentException.class)
     public void testPhoneValidation(){
-        Customer customer = new Customer("Alexi Most", -1);
+        Customer customer = new Customer("Alexi Most", "1");
     }
     
     

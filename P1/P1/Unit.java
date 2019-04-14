@@ -6,13 +6,8 @@ import java.time.LocalDate;
  * @author Alexi Most
  * @version 1
  */
-public class Unit
+public abstract class Unit
 {
-    /** unit types */
-    public enum Type {standard, humidityControlled, temperatureControlled};
-    
-    /** the type of this unit */
-    private Type type;
     /** the width of the unit */
     private int width;
     /** the length of the unit */
@@ -21,44 +16,35 @@ public class Unit
     private int height;
     /** the customer this unit belongs to */
     private Customer customer;
-    /** the standard price for the unit */
-    private double standardPrice;
-    /** the price this unit was rented at */
-    private double rentedPrice; 
     /** the date the unit was rented on */
     private LocalDate date;
+    /** the Location of this unit */
+    private Location location;
 
     /**
      * Constructor for objects of class Unit
-     * 
-     * @param _type     the type of unit
-     * @param _width    the width of the unit
-     * @param _length   the length of the unit
+     *
+     * @param width    the width of the unit, multiple of 4, greater than 0
+     * @param length   the length of the unit, multiple of 4, greater than 0
+     * @param height   the height of the unit, multiple of 2, greater than 0
+     * @param location the location of this unit
      */
-    public Unit(Type _type, int _width, int _length, int _height, double _standardPrice)
+    public Unit(int width, int length, int height, Location location)
     {
         // validate dimensions
-        if(_width % 4 != 0 || _length % 4 != 0 || _height % 2 != 0){
+        if(width <= 0 || length <= 0 || height <= 0){
+            throw new IllegalArgumentException("dimensions must be > 0");
+        }
+        if(width % 4 != 0 || length % 4 != 0 || height % 2 != 0){
             throw new IllegalArgumentException("width and height must be multiples of 4, height must be a multiple of 2");
         }
-            
-        type = _type;
-        width = _width;
-        length = _length;
-        height = _height;
-        standardPrice = _standardPrice;
-        customer = null; // no customer until it is rented  
-        rentedPrice = 0.0; // no price until it is rented
-        date = LocalDate.now();
-    }
 
-    /**
-     * gets the type of unit
-     * 
-     * @return the unit type
-     */
-    public Type getType(){
-        return type;
+        this.width = width;
+        this.length = length;
+        this.height = height;
+        customer = null; // no customer until it is rented
+        date = LocalDate.now();
+        this.location = location;
     }
     
     /**
@@ -112,26 +98,18 @@ public class Unit
      * 
      * @return the rented price
      */
-    public Double getPrice(){
-        if(customer == null){
-            return standardPrice;
-        }
-        else{
-            return rentedPrice;
-        }
-    }
+    abstract Double getPrice();
     
     /**
      * rents the unit to a new customer
      * 
-     * @param _customer the customer
-     * @param _date     the date rented
-     * @param _rentedPrice     the price it was rented for
+     * @param customer the customer
+     * @param date     the date rented
+     * @param rentedPrice     the price it was rented for
      */
-    public void rentUnit(Customer _customer, LocalDate _date, double _rentedPrice){
-        customer = _customer;
-        date = _date;
-        rentedPrice = _rentedPrice;
+    public void rentUnit(Customer customer, LocalDate date, double rentedPrice){
+        this.customer = customer;
+        this.date = date;
     }
     
     /** 
@@ -148,7 +126,7 @@ public class Unit
      */
     public String toString(){
         String customerString = customer == null ? "none" : customer.toString();
-        return type + ", " + width + "x" + length + "x" + height + ", Customer: " +  customerString
-            + ", $" + standardPrice + ", $" + rentedPrice + ", " + date;
+        return width + "x" + length + "x" + height + ", Customer: " +  customerString
+            + ", " + date;
     }
 }

@@ -8,39 +8,93 @@
      */
     public class Location
     {
+        // constants
         /** the array resize value when the number of customers exceeds array size */
         private static int RESIZE_VALUE;
-        /** the number of rows of units */
-        private static int ROWS;
-        /** the number of columns of units */
-        private static int COLUMNS;
-        /** the name of this location */
+        /** the minimum controlled humidity */
+        public final int MIN_HUMIDITY;
+        /** the maximum controlled humidity */
+        public final int MAX_HUMIDITY;
+        /** premium humidity limit */
+        public final int SPEC_HUMIDITY;
+        /** the minimum controlled temperature */
+        public final int MIN_TEMP;
+        /** the maximum controlled temperature */
+        public final int MAX_TEMP;
+        /** low premium temperature limit */
+        public final int SPEC_TEMP_LOW;
+        /** high premium temperature limit */
+        public final int SPEC_TEMP_HIGH;
+
+        /** number of standard rows */
+        private int rowsStandard;
+        /** number of standard columns */
+        private int colsStandard;
+        /** number of humidity rows */
+        private int rowsHumidity;
+        /** number of humidity columns */
+        private int colsHumidity;
+        /** number of temperature rows */
+        private int rowsTemperature;
+        /** number of temperature columns */
+        private int colsTemperature;
+
+        /** base unit price */
+        private int baseUnitPrice;
+        /** price for special humidity */
+        private int specHumidPrice;
+        /** price for special temperature */
+        private int specTempPrice;
+        /** discount for multiple units, percent expressed as decimal */
+        private double multiUnitDiscoount;
+        /** added rate for standard unit */
+        private double standardFlatRate;
+        /** added rate for humidity unit, multiplied by floor squared footage */
+        private double humidSquaredRate;
+        /** added rate for temperature unit, multiplied by unit area cubed */
+        private double tempCubedRate;
+
+        /** location name */
         private String name;
-        /** the storage units at this location */
+        /** units at location */
         private Unit[][] units;
-        /** the customers that have rented at this location */
+        /** customers registered at location */
         private Customer[] customers;
-        /** the number of customers registered at this location */
-        private int customerCount;
-    
-        
+
+        /**
+         * main application method
+         *
+         * @param args command line arguments
+         */
+        public static void Main(String[] args){
+
+        }
+
         /**
          * Constructor for objects of class Location
          * 
-         * @param _name the name of this location 
+         * @param name the name of this location
          *      Name must start with 2 capital letters for state abbreviation
-         *      This must be folllowed by 2 digit area number
+         *      This must be followed by 2 digit area number
          *      This must be followed with city name, capitalized
          */
-        public Location(String _name)
+        public Location(String name)
         {
-            // check that name follows conventions
-            validateName(_name);
-            name = _name;
-            
+            // set constants
             RESIZE_VALUE = 100;
-            ROWS = 12;
-            COLUMNS = 20;
+            MIN_HUMIDITY = 20;
+            MAX_HUMIDITY = 60;
+            SPEC_HUMIDITY = 29;
+            MIN_TEMP = 45;
+            MAX_TEMP = 70;
+            SPEC_TEMP_LOW = 49;
+            SPEC_TEMP_HIGH = 65;
+
+            // check that name follows conventions
+            validateName(name);
+            this.name = name;
+            
+
             
             customers = new Customer[RESIZE_VALUE];
             units = new Unit[COLUMNS][ROWS];
@@ -67,27 +121,27 @@
         /**
          * method to validate location name
          * 
-         * @param _name the attemped name
+         * @param newName the attemped name
          */
-        private void validateName(String _name){
+        private void validateName(String newName){
             
-            if(_name.length() < 5){
+            if(newName.length() < 5){
                 throw new IllegalArgumentException("Name does not fulfill parameters, not long enough");
             }
             
-            if(! _name.substring(0, 1).matches("[A-Z]")){
+            if(! newName.substring(0, 1).matches("[A-Z]")){
                 throw new IllegalArgumentException("First two characters must be capitals indicating state");
             }
             
-            if(! _name.substring(2, 3).matches("[0-9]")){
+            if(! newName.substring(2, 3).matches("[0-9]")){
                 throw new IllegalArgumentException("Third and fourth characters must be integers");
             }
             
-            if(! Character.toString(_name.charAt(4)).matches("[A-Z]")){
+            if(! Character.toString(newName.charAt(4)).matches("[A-Z]")){
                 throw new IllegalArgumentException("City must start with a capital letter");
             }
             
-            if(_name.length() > 5 && ! _name.substring(5).matches("[a-zA-Z]+")){
+            if(newName.length() > 5 && ! newName.substring(5).matches("[a-zA-Z]+")){
                 throw new IllegalArgumentException("City name must be in characters");
             }
         }
@@ -98,9 +152,7 @@
          */    
         private void resizeCustomersArray(){
             Customer newCustomers[] = new Customer[customers.length + RESIZE_VALUE];
-            for(int i = 0; i < customers.length; i++){
-                newCustomers[i] = customers[i];
-            }
+            System.arraycopy(customers, 0, newCustomers, 0, customers.length);
             customers = newCustomers;
         }
         

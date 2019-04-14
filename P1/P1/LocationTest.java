@@ -4,6 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import java.time.LocalDate;
 
+// TEST UNIT FILTERING
+
 /**
  * The test class LocationTest.
  *
@@ -28,9 +30,9 @@ public class LocationTest
     {
         testLocation = new Location("WA01Seattle");
         ALLOWANCE = 0.00001;
-        johnDoe = new Customer("John Doe",      0001112222);
-        alexiMost = new Customer("Alexi Most",  0001112222);
-        jimDandy = new Customer("Jim Dandy",    0001112222);
+        johnDoe = new Customer("John Doe",      "0001112222");
+        alexiMost = new Customer("Alexi Most",  "0001112222");
+        jimDandy = new Customer("Jim Dandy",    "0001112222");
     }
 
     /**

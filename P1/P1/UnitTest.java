@@ -31,7 +31,7 @@ public class UnitTest
     {
         ALLOWANCE = 0.00001;
         
-        testCustomer = new Customer("Alexi Most", 0001112222);
+        testCustomer = new Customer("Alexi Most", "0001112222");
         testUnit = new Unit(Unit.Type.standard, 4, 8, 2, 1.6);
     }
 
