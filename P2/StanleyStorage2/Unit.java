@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.lang.IllegalArgumentException;
 
 /**
  * A Stanley's Storage Storage Unit
@@ -19,7 +20,8 @@ public abstract class Unit
     /** the date the unit was rented on */
     private LocalDate date;
     /** the Location of this unit */
-    private Location location;
+    // private Location location;
+    // stored in subclass because protected is not applicable in this course
 
     /**
      * Constructor for objects of class Unit
@@ -44,7 +46,7 @@ public abstract class Unit
         this.height = height;
         customer = null; // no customer until it is rented
         date = LocalDate.now();
-        this.location = location;
+        // this.location = location;
     }
     
     /**
@@ -98,7 +100,7 @@ public abstract class Unit
      * 
      * @return the rented price
      */
-    abstract Double getPrice();
+    abstract double getPrice();
     
     /**
      * rents the unit to a new customer

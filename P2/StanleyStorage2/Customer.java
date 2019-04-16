@@ -138,6 +138,6 @@ public class Customer{
      * @return string representation
      */
     public String toString(){
-        return name + " " + phone + " " + debt;
+        return name + ", #" + phone + ", owes $" + debt;
     }            
 }

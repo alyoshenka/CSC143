@@ -1,6 +1,6 @@
-    import java.util.regex.Matcher;
-    
-    /**
+import java.text.DecimalFormat;
+
+/**
      * A Stanley's Storage Storage Location
      *
      * @author Alexi Most
@@ -18,9 +18,9 @@
         /** premium humidity limit */
         public final int SPEC_HUMIDITY;
         /** the minimum controlled temperature */
-        public final int MIN_TEMP;
+        public final int MIN_TEMPERATURE;
         /** the maximum controlled temperature */
-        public final int MAX_TEMP;
+        public final int MAX_TEMPERATURE;
         /** low premium temperature limit */
         public final int SPEC_TEMP_LOW;
         /** high premium temperature limit */
@@ -38,21 +38,25 @@
         private int rowsTemperature;
         /** number of temperature columns */
         private int colsTemperature;
+        /** total number of rows */
+        private int rows;
+        /** total number of columns */
+        private int cols;
 
         /** base unit price */
-        private int baseUnitPrice;
+        private double baseUnitPrice;
         /** price for special humidity */
-        private int specHumidPrice;
+        private double specialHumidityPrice;
         /** price for special temperature */
-        private int specTempPrice;
+        private double specialTemperaturePrice;
         /** discount for multiple units, percent expressed as decimal */
         private double multiUnitDiscoount;
         /** added rate for standard unit */
         private double standardFlatRate;
         /** added rate for humidity unit, multiplied by floor squared footage */
-        private double humidSquaredRate;
+        private double humiditySquaredRate;
         /** added rate for temperature unit, multiplied by unit area cubed */
-        private double tempCubedRate;
+        private double temperatureCubedRate;
 
         /** location name */
         private String name;
@@ -60,6 +64,8 @@
         private Unit[][] units;
         /** customers registered at location */
         private Customer[] customers;
+        /** number of resistered customers */
+        private int customerCount;
 
         /**
          * main application method
@@ -85,33 +91,47 @@
             MIN_HUMIDITY = 20;
             MAX_HUMIDITY = 60;
             SPEC_HUMIDITY = 29;
-            MIN_TEMP = 45;
-            MAX_TEMP = 70;
+            MIN_TEMPERATURE = 45;
+            MAX_TEMPERATURE = 70;
             SPEC_TEMP_LOW = 49;
             SPEC_TEMP_HIGH = 65;
+
+            // initialize unit counts
+            rowsStandard = 7;
+            colsStandard = 10;
+            rowsHumidity = 3;
+            colsHumidity = 9;
+            rowsTemperature = 2;
+            colsTemperature = 6;
+
+            // initialize prices
+            baseUnitPrice = 50.0; // arbitrarily set
+            standardFlatRate = 75.0;
+            humiditySquaredRate = 5.0;
+            temperatureCubedRate = 1.0;
+
+            customerCount = 0;
 
             // check that name follows conventions
             validateName(name);
             this.name = name;
-            
 
-            
+            rows = rowsStandard + rowsHumidity + rowsTemperature;
+            cols = colsStandard + colsTemperature + colsHumidity;
             customers = new Customer[RESIZE_VALUE];
-            units = new Unit[COLUMNS][ROWS];
-            
-            customerCount = 0;
+            units = new Unit[cols][rows];
             
             // initialize units
-            for(int col = 0; col < COLUMNS; col++){
-                for(int row = 0; row < ROWS; row++){
-                    if(row >=8){
-                        units[col][row] = new Unit(Unit.Type.standard, 4, 8, 2, 10.0);
+            for(int col = 0; col < cols; col++){
+                for(int row = 0; row < units[col].length; row++){
+                    if(col < colsStandard){
+                        units[col][row] = new StandardUnit(4, 8, 2, this);
                     }
-                    else if(row >= 4){
-                        units[col][row] = new Unit(Unit.Type.humidityControlled, 4, 8, 2, 10.0);
+                    else if(col < colsStandard + colsHumidity){
+                        units[col][row] = new HumidityUnit(4, 8, 2, this, 0);
                     }
                     else{
-                        units[col][row] = new Unit(Unit.Type.temperatureControlled, 4, 8, 2, 10.0);
+                        units[col][row] = new TemperatureUnit(4, 8, 2, this, 0);
                     }
                 }
             }
@@ -231,11 +251,11 @@
          *      of the Type the Customer is renting
          * 
          * @param customer the Customer to check against
-         * @param type Unit Type to check against
+         * @param classType class of unit to check against, ClassName.class
          * 
          * @return the Units the given Customer is renting
          */
-        public Unit[] getUnits(Customer customer, Unit.Type type){
+        public Unit[] getUnits(Customer customer, Class classType){
              /** the number of units fitting parameter */
              int count = 0;
              /** the units array, initialized after determining size */
@@ -244,37 +264,42 @@
              Customer currentCustomer;
              /** Unit declaration for comparison */
              Unit currentUnit;
-             
-             
+
+             /** start index to search from (inclusive) */
+             int start;
+             /** end index to search to (exclusive) */
+             int end;
+
+             // establish range to search
+            if(classType == units[0][0].getClass()){ // standard
+                start = 0;
+                end = colsStandard;
+            } else if(classType == units[colsStandard][0].getClass()){ // humidity
+                start = colsStandard;
+                end = colsStandard + colsHumidity;
+            }
+            else{ // temperature
+                start = colsStandard + colsHumidity;
+                end = cols;
+            }
+
              // get number of units matching parameters
-             for(int col = 0; col < units.length; col++){
-                 for(int row = 0; row < units[0].length; row++){
-                     
+             for(int col = start; col < end; col++){
+                 for(int row = 0; row < units[col].length; row++){
+
+                     // store current unit and customer to reduce number of times calling gets
                      currentUnit = units[col][row];
                      currentCustomer = currentUnit.getCustomer();
                  
                      if (customer == null){
-                     
-                         if(type == null){
-                             count++;
-                         }
-                         else if (units[col][row].getType() == type){
-                             count++;                      
-                         }
+                         count++;
                      }             
                      else if (customer == currentCustomer){
-                     
-                         if (type == null){
-                             count++;
-                         } 
-                         else if (type == units[col][row].getType()){
-                             count++;
-                         }   
+                        count++;
                      }
                  }                                                                 
              }
-        
-         
+
              // make array of given size
              tempUnits = new Unit[count];
              // reset count to use as array index
@@ -288,23 +313,11 @@
                      currentCustomer = currentUnit.getCustomer();
                  
                      if(customer == null){
-                     
-                        if(type == null){
-                             tempUnits[count++] = currentUnit;
-                        }
-                        else if(units[col][row].getType() == type){
-                            tempUnits[count++] = currentUnit;                        
-                        }
-                    }
-                    else if(customer == currentCustomer){
-                     
-                        if(type == null){
-                            tempUnits[count++] = currentUnit;
-                        } 
-                        else if(type == units[col][row].getType()){
-                            tempUnits[count++] = currentUnit;
-                        }   
-                    }
+                         tempUnits[count++] = currentUnit; // casting done from other side
+                     }
+                     else if(customer == currentCustomer){
+                         tempUnits[count++] = currentUnit; // casting done from other side
+                     }
                 }
             }
          
@@ -312,38 +325,114 @@
         return tempUnits;
     }
      
-    /**
-     * Adds monthly charge to Customer's balance
-     */
-    public void chargeMonthlyRent(){
-         // Unit Has-A Customer, but Customer does not Have-A Unit
-         // so iterate through Units and get customers
-         
-         /** Customer instance to test against */
-         Customer tempCustomer;
-         /** Unit instance to test against */
-         Unit tempUnit;
-         
-         for(int col = 0; col < units.length; col++){
-             for(int row = 0; row < units[0].length; row++){
-                 
-                 tempUnit = units[col][row];
-                 tempCustomer = tempUnit.getCustomer();
-                 
-                 if(tempCustomer != null){
-                     tempCustomer.charge(tempUnit.getPrice());
+        /**
+         * Adds monthly charge to Customer's balance
+         */
+        public void chargeMonthlyRent(){
+             // Unit Has-A Customer, but Customer does not Have-A Unit
+             // so iterate through Units and get customers
+
+             /** Customer instance to test against */
+             Customer tempCustomer;
+             /** Unit instance to test against */
+             Unit tempUnit;
+
+             for(int col = 0; col < units.length; col++){
+                 for(int row = 0; row < units[0].length; row++){
+
+                     tempUnit = units[col][row];
+                     tempCustomer = tempUnit.getCustomer();
+
+                     if(tempCustomer != null){
+                         // apply discount for multi-unit renters
+                         if(getUnits(tempCustomer, null).length >= 2){
+                             // MAKE MORE EFFICIENT
+                             tempCustomer.charge(tempUnit.getPrice() * (1.0 - multiUnitDiscoount));
+                         }else{
+                             tempCustomer.charge(tempUnit.getPrice());
+                         }
+                     }
                  }
              }
-         }
-    }
-     
-    /**
-     * gets String representation of this object
-     * 
-     * @return String representation of this object
-     */
-    public String toString(){
-        return name + ", " + "Units[" + COLUMNS + "][" + ROWS + "], Customers[" 
-            + customerCount + "]";
-    }
+        }
+
+        /**
+         * gets the base price of a unit
+         *
+         * @return the unit base price
+         */
+        public double getBasePrice(){
+            return baseUnitPrice;
+        }
+
+        /**
+         * sets the base price of a unit
+         *
+         * @param price the new base price
+         */
+        public void setBasePrice(double price){
+            // validate
+            if(price > 0){
+                baseUnitPrice = price;
+            }
+        }
+
+        /**
+         * gets the price for a premium humidity unit
+         *
+         * @return the premium humidity unit rate
+         */
+        public double getSpecialHumidityPrice(){
+            return specialHumidityPrice;
+        }
+
+        /**
+         * gets the price for a premium temperature unit
+         *
+         * @return the premium humidity unit rate
+         */
+        public double getSpecialTemperaturePrice(){
+            return specialTemperaturePrice;
+        }
+
+        /**
+         * gets the humidity rate per squared foot
+         *
+         * @return humidity price per square foot
+         */
+        public double getHumditySquaredPrice(){
+            return humiditySquaredRate;
+        }
+        /**
+         * gets the temperature rate per cubic foot
+         *
+         * @return temperature price per cubic foot
+         */
+        public double getTemperatureCubedPrice(){
+            return temperatureCubedRate;
+        }
+
+        /**
+         * gets String representation of this object
+         *
+         * @return String representation of this object
+         */
+        public String toString(){ // FINISH
+
+            // format doubles to 2 digits after decimal
+            DecimalFormat df = new DecimalFormat("#.00");
+
+            String unitData = "Units[" + cols + "][" + rows + "], "
+                    + " Standard: " + colsStandard * rowsStandard
+                    + ", Humidity: " + colsHumidity * rowsHumidity
+                    + ", Temperature: " + colsTemperature * rowsTemperature;
+            String customerData = "\nCustomers["+ customerCount + "]";
+            String rateData = "\nRates: Standard = " + df.format(standardFlatRate)
+                    + " Humidity = $" + df.format(humiditySquaredRate) +  "sq/ft"
+                    + " Humidity Premium = $" + df.format(specialHumidityPrice)
+                    + " Temperature = $" + df.format(humiditySquaredRate) + "cub/ft"
+                    + " Temperature Premium = $" + df.format(specialTemperaturePrice);
+
+            return unitData + customerData + rateData;
+        }
 }

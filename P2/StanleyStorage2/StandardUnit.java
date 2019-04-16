@@ -1,5 +1,8 @@
 public class StandardUnit extends Unit {
 
+    /** the location of this unit */
+    private Location location;
+
     /**
      * constructor for standard unit
      *
@@ -18,8 +21,8 @@ public class StandardUnit extends Unit {
      *
      * @return the monthly price of the unit
      */
-    public Double getPrice(){
-        return location.getBasePrice();
+    public double getPrice(){
+        return location.getBasePrice() + location.getBasePrice();
     }
 
 }
