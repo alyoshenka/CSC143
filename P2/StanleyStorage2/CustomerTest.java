@@ -51,7 +51,7 @@ public class CustomerTest
     @Test
     public void constructorsAndGets(){
         assertEquals("Alexi Most", testCustomer.getName());
-        assertEquals(0001112222, testCustomer.getPhone());                
+        assertEquals("0001112222", testCustomer.getPhone());                
     }
     
     

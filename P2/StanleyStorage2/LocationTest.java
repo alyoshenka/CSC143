@@ -73,10 +73,44 @@ public class LocationTest
     }
     
     /**
+     * tests name validation
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testVaidation2(){
+        Location bn2 = new Location("WA936Seattle");
+    }
+    
+    /**
+     * tests name validation
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testVaidation3(){
+        Location bn2 = new Location("WA01seattle");
+    }
+    
+    /**
+     * tests name validation
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testVaidation4(){
+        Location bn2 = new Location("Wa01seattle");
+    }
+    
+    /**
+     * tests name validation
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testVaidation5(){
+        Location bn2 = new Location("Wa01Seattle7");
+    }
+    
+    /**
      * tests methods relating to Units
      */
     public void testUnits(){
-        assertEquals(Unit.Type.standard, testLocation.getUnit(8, 0));
+        assertEquals(StandardUnit.class, testLocation.getUnit(0, 0).getClass());
+        assertEquals(HumidityUnit.class, testLocation.getUnit(10, 0).getClass());
+        assertEquals(TemperatureUnit.class, testLocation.getUnit(18, 0).getClass());
     }
     
     /**
@@ -92,12 +126,12 @@ public class LocationTest
         
         // checking getting units of type
             // no units have been specifically rented, so nothing should come up
-        assertEquals(240, (testLocation.getUnits(null, null)).length);
-            // there should be (4 * 20 = ) 80 locations of each type
-        assertEquals(80, (testLocation.getUnits(null, Unit.Type.standard)).length);
+        assertEquals(7 * 10 + 3 * 8 + 2 * 6, (testLocation.getUnits(null, null)).length);
+            // there should be (7 * 10 = ) 70 locations of each type
+        assertEquals(70, (testLocation.getUnits(null, StandardUnit.class)).length);
             // rent units 
-        testLocation.getUnit(0, 0).rentUnit(johnDoe, LocalDate.now(), 10.1);
-        testLocation.getUnit(0, 1).rentUnit(johnDoe, LocalDate.now(), 10.1);
+        testLocation.getUnit(0, 0).rentUnit(johnDoe, LocalDate.now());
+        testLocation.getUnit(0, 1).rentUnit(johnDoe, LocalDate.now());
         assertEquals(2, (testLocation.getUnits(johnDoe, null)).length);
     }
     
@@ -128,9 +162,9 @@ public class LocationTest
         double testPrice = 3.4;
 
         // rent unit with standard price
-        rentingUnit.rentUnit(jimDandy, LocalDate.now(), rentingUnit.getPrice());
+        rentingUnit.rentUnit(jimDandy, LocalDate.now());
         // rent unit with given price
-        rentingUnit2.rentUnit(jimDandy, LocalDate.now(), testPrice);
+        rentingUnit2.rentUnit(jimDandy, LocalDate.now());
         
         testLocation.chargeMonthlyRent();
         

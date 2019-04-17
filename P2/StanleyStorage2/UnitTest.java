@@ -32,7 +32,7 @@ public class UnitTest
         ALLOWANCE = 0.00001;
         
         testCustomer = new Customer("Alexi Most", "0001112222");
-        testUnit = new Unit(Unit.Type.standard, 4, 8, 2, 1.6);
+        testUnit = new StandardUnit(4, 8, 2, new Location("WA01Seattle"));
     }
 
     
@@ -63,12 +63,30 @@ public class UnitTest
      */
     @Test
     public void testGetters(){
-        assertEquals(Unit.Type.standard, testUnit.getType());
+        assertEquals(StandardUnit.class, testUnit.getClass());
         assertEquals(4, testUnit.getWidth());
         assertEquals(8, testUnit.getLength());
         assertEquals(2, testUnit.getHeight());
         assertEquals(null, testUnit.getCustomer());
-        assertEquals(1.6, testUnit.getPrice(), ALLOWANCE);
+    }
+    
+    /**
+     * tests prices
+     */
+    @Test
+    public void testPrices(){
+        Location l = new Location("WA01Seattle");
+        StandardUnit s = new StandardUnit(4, 4, 2, l);
+        HumidityUnit u = new HumidityUnit(4, 4, 2, l, 30);
+        HumidityUnit up = new HumidityUnit(4, 4, 2, l, 29); // premium
+        TemperatureUnit t = new TemperatureUnit(4, 4, 2, l, 64);
+        TemperatureUnit tp = new TemperatureUnit(4, 4, 2, l, 65); // premium
+        
+        assertEquals(50.0 + 75, s.getPrice(), ALLOWANCE);
+        assertEquals(50.0 + 4 * 4 * 5, u.getPrice(), ALLOWANCE);
+        assertEquals(50.0 + 4 * 4 * 1 + 20, up.getPrice(), ALLOWANCE);
+        assertEquals(50.0 + 4 * 4 * 2 * 5, t.getPrice(), ALLOWANCE);
+        assertEquals(50.0 + 4 * 4 * 2 * 5 + 30, tp.getPrice(), ALLOWANCE);
     }
     
     
@@ -79,7 +97,7 @@ public class UnitTest
     public void testRenting(){
         LocalDate currentTime = LocalDate.now();
         
-        testUnit.rentUnit(testCustomer, currentTime, 5.5);
+        testUnit.rentUnit(testCustomer, currentTime);
         
         assertEquals(testCustomer, testUnit.getCustomer());
         assertEquals(currentTime, testUnit.getRentalDate());
@@ -92,16 +110,16 @@ public class UnitTest
      */
     @Test
     public void testRelease(){
-        testUnit.rentUnit(testCustomer, LocalDate.now(), 5.5); // just in case it didn't get called
+        testUnit.rentUnit(testCustomer, LocalDate.now()); // just in case it didn't get called
         testUnit.releaseUnit();
         assertEquals(null, testUnit.getCustomer());
     }
     
     /**
-     * rests dimension validation
+     * tests dimension validation
      */
     @Test(expected = IllegalArgumentException.class)
     public void testValidation(){
-        Unit testUnit2 = new Unit(Unit.Type.standard, 5, 4, 2, 0.0);
+        StandardUnit testUnit2 = new StandardUnit(5, 4, 2, new Location("WA01Seattle"));
     }
 }

@@ -100,7 +100,7 @@ import java.text.DecimalFormat;
             rowsStandard = 7;
             colsStandard = 10;
             rowsHumidity = 3;
-            colsHumidity = 9;
+            colsHumidity = 8;
             rowsTemperature = 2;
             colsTemperature = 6;
 
@@ -128,10 +128,10 @@ import java.text.DecimalFormat;
                         units[col][row] = new StandardUnit(4, 8, 2, this);
                     }
                     else if(col < colsStandard + colsHumidity){
-                        units[col][row] = new HumidityUnit(4, 8, 2, this, 0);
+                        units[col][row] = new HumidityUnit(4, 8, 2, this, 20);
                     }
                     else{
-                        units[col][row] = new TemperatureUnit(4, 8, 2, this, 0);
+                        units[col][row] = new TemperatureUnit(4, 8, 2, this, 45);
                     }
                 }
             }
@@ -306,7 +306,7 @@ import java.text.DecimalFormat;
              count = 0;
          
              // fill in array            
-             for(int col = 0; col < units.length; col++){
+             for(int col = start; col < units.length; col++){
                  for(int row = 0; row < units[0].length; row++){
                  
                      currentUnit = units[col][row];

@@ -1,0 +1,14 @@
+echo off
+
+REM Create a temp directory and move all test files into it
+md temp
+move *test.java temp
+
+REM Clear the screen, then do the requested Xlint and Xdoclint runs
+cls
+"c:\Program Files (x86)\BlueJ\jdk\bin\javac.exe" -Xlint:unchecked *.java 
+"c:\Program Files (x86)\BlueJ\jdk\bin\javac.exe" -Xdoclint:all *.java
+
+REM Move the files back and delete the now-empty directory
+move temp\*.* .
+rd temp

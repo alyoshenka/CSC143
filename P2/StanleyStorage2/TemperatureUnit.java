@@ -1,20 +1,15 @@
+/** a temperature-controlled unit */
 public class TemperatureUnit extends Unit {
 
-    /**
-     * the temperature of this unit
-     */
+    /** the temperature of this unit */    
     private int temperature;
-    /**
-     * the location of this unit
-     */
-    private Location location;
 
     /**
      * constructor for humidity unit
      *
-     * @param length      the length of this unit, multiple of 4, > 0
-     * @param width       the width of this unit, multiple of 4, > 0
-     * @param height      the height of this unit, multiple of 2, > 0
+     * @param length      the length of this unit, multiple of 4, greater than 0
+     * @param width       the width of this unit, multiple of 4, greater than 0
+     * @param height      the height of this unit, multiple of 2, greater than 0
      * @param location    the location of this unit
      * @param temperature the temperature for this unit
      */
@@ -30,9 +25,9 @@ public class TemperatureUnit extends Unit {
      * @param newTemp temperature value
      */
     private void validateTemperature(int newTemp) {
-        if (newTemp < location.MIN_TEMPERATURE || newTemp > location.MAX_TEMPERATURE) {
+        if (newTemp < getLocation().MIN_TEMPERATURE || newTemp > getLocation().MAX_TEMPERATURE) {
             throw new IllegalArgumentException("temperature must be between "
-                    + location.MIN_TEMPERATURE + " and " + location.MAX_TEMPERATURE);
+                    + getLocation().MIN_TEMPERATURE + " and " + getLocation().MAX_TEMPERATURE);
         }
     }
 
@@ -42,7 +37,7 @@ public class TemperatureUnit extends Unit {
      * @return the monthly rate for this unit
      */
     public double getPrice() {
-        return location.getBasePrice() + (location.getTemperatureCubedPrice() * getLength() * getWidth() * getHeight());
+        return getLocation().getBasePrice() + (getLocation().getTemperatureCubedPrice() * getLength() * getWidth() * getHeight());
     }
 
     /**

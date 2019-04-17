@@ -20,8 +20,7 @@ public abstract class Unit
     /** the date the unit was rented on */
     private LocalDate date;
     /** the Location of this unit */
-    // private Location location;
-    // stored in subclass because protected is not applicable in this course
+    private Location location;
 
     /**
      * Constructor for objects of class Unit
@@ -46,7 +45,7 @@ public abstract class Unit
         this.height = height;
         customer = null; // no customer until it is rented
         date = LocalDate.now();
-        // this.location = location;
+        this.location = location;
     }
     
     /**
@@ -96,6 +95,15 @@ public abstract class Unit
     }
     
     /**
+     * gets the Location of this unit
+     * 
+     * @return this Unit's location
+     */
+    public Location getLocation(){
+        return location;
+    }
+    
+    /**
      * gets the price this unit was rented at 
      * 
      * @return the rented price
@@ -107,9 +115,8 @@ public abstract class Unit
      * 
      * @param customer the customer
      * @param date     the date rented
-     * @param rentedPrice     the price it was rented for
      */
-    public void rentUnit(Customer customer, LocalDate date, double rentedPrice){
+    public void rentUnit(Customer customer, LocalDate date){
         this.customer = customer;
         this.date = date;
     }
