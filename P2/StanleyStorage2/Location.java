@@ -1,139 +1,148 @@
-import java.text.DecimalFormat;
-
-/**
-     * A Stanley's Storage Storage Location
-     *
-     * @author Alexi Most
-     * @version 1
-     */
-    public class Location
-    {
-        // constants
-        /** the array resize value when the number of customers exceeds array size */
-        private static int RESIZE_VALUE;
-        /** the minimum controlled humidity */
-        public final int MIN_HUMIDITY;
-        /** the maximum controlled humidity */
-        public final int MAX_HUMIDITY;
-        /** premium humidity limit */
-        public final int SPEC_HUMIDITY;
-        /** the minimum controlled temperature */
-        public final int MIN_TEMPERATURE;
-        /** the maximum controlled temperature */
-        public final int MAX_TEMPERATURE;
-        /** low premium temperature limit */
-        public final int SPEC_TEMP_LOW;
-        /** high premium temperature limit */
-        public final int SPEC_TEMP_HIGH;
-
-        /** number of standard rows */
-        private int rowsStandard;
-        /** number of standard columns */
-        private int colsStandard;
-        /** number of humidity rows */
-        private int rowsHumidity;
-        /** number of humidity columns */
-        private int colsHumidity;
-        /** number of temperature rows */
-        private int rowsTemperature;
-        /** number of temperature columns */
-        private int colsTemperature;
-        /** total number of rows */
-        private int rows;
-        /** total number of columns */
-        private int cols;
-
-        /** base unit price */
-        private double baseUnitPrice;
-        /** price for special humidity */
-        private double specialHumidityPrice;
-        /** price for special temperature */
-        private double specialTemperaturePrice;
-        /** discount for multiple units, percent expressed as decimal */
-        private double multiUnitDiscoount;
-        /** added rate for standard unit */
-        private double standardFlatRate;
-        /** added rate for humidity unit, multiplied by floor squared footage */
-        private double humiditySquaredRate;
-        /** added rate for temperature unit, multiplied by unit area cubed */
-        private double temperatureCubedRate;
-
-        /** location name */
-        private String name;
-        /** units at location */
-        private Unit[][] units;
-        /** customers registered at location */
-        private Customer[] customers;
-        /** number of resistered customers */
-        private int customerCount;
-
-        /**
-         * main application method
+    import java.text.DecimalFormat;
+    
+    /**
+         * A Stanley's Storage Storage Location
          *
-         * @param args command line arguments
+         * @author Alexi Most
+         * @version 1
          */
-        public static void Main(String[] args){
-
-        }
-
-        /**
-         * Constructor for objects of class Location
-         * 
-         * @param name the name of this location
-         *      Name must start with 2 capital letters for state abbreviation
-         *      This must be followed by 2 digit area number
-         *      This must be followed with city name, capitalized
-         */
-        public Location(String name)
+        public class Location
         {
-            // set constants
-            RESIZE_VALUE = 100;
-            MIN_HUMIDITY = 20;
-            MAX_HUMIDITY = 60;
-            SPEC_HUMIDITY = 29;
-            MIN_TEMPERATURE = 45;
-            MAX_TEMPERATURE = 70;
-            SPEC_TEMP_LOW = 49;
-            SPEC_TEMP_HIGH = 65;
-
-            // initialize unit counts
-            rowsStandard = 7;
-            colsStandard = 10;
-            rowsHumidity = 3;
-            colsHumidity = 8;
-            rowsTemperature = 2;
-            colsTemperature = 6;
-
-            // initialize prices
-            baseUnitPrice = 50.0; // arbitrarily set
-            standardFlatRate = 75.0;
-            humiditySquaredRate = 5.0;
-            temperatureCubedRate = 1.0;
-
-            customerCount = 0;
-
-            // check that name follows conventions
-            validateName(name);
-            this.name = name;
-
-            rows = rowsStandard + rowsHumidity + rowsTemperature;
-            cols = colsStandard + colsTemperature + colsHumidity;
-            customers = new Customer[RESIZE_VALUE];
-            units = new Unit[cols][rows];
-            
-            // initialize units
-            for(int col = 0; col < cols; col++){
-                for(int row = 0; row < units[col].length; row++){
+            // constants
+            /** the array resize value when the number of customers exceeds array size */
+            private static int RESIZE_VALUE;
+            /** the minimum controlled humidity */
+            public final int MIN_HUMIDITY;
+            /** the maximum controlled humidity */
+            public final int MAX_HUMIDITY;
+            /** premium humidity limit */
+            public final int SPEC_HUMIDITY;
+            /** the minimum controlled temperature */
+            public final int MIN_TEMPERATURE;
+            /** the maximum controlled temperature */
+            public final int MAX_TEMPERATURE;
+            /** low premium temperature limit */
+            public final int SPEC_TEMP_LOW;
+            /** high premium temperature limit */
+            public final int SPEC_TEMP_HIGH;
+    
+            /** number of standard rows */
+            private int rowsStandard;
+            /** number of standard columns */
+            private int colsStandard;
+            /** number of humidity rows */
+            private int rowsHumidity;
+            /** number of humidity columns */
+            private int colsHumidity;
+            /** number of temperature rows */
+            private int rowsTemperature;
+            /** number of temperature columns */
+            private int colsTemperature;
+            /** total number of rows */
+            private int rows;
+            /** total number of columns */
+            private int cols;
+    
+            /** base unit price */
+            private double baseUnitPrice;
+            /** price for special humidity */
+            private double specialHumidityPrice;
+            /** price for special temperature */
+            private double specialTemperaturePrice;
+            /** discount for multiple units, percent expressed as decimal */
+            private double multiUnitDiscoount;
+            /** added rate for standard unit */
+            private double standardFlatRate;
+            /** added rate for humidity unit, multiplied by floor squared footage */
+            private double humiditySquaredRate;
+            /** added rate for temperature unit, multiplied by unit area cubed */
+            private double temperatureCubedRate;
+    
+            /** location name */
+            private String name;
+            /** units at location */
+            private Unit[][] units;
+            /** customers registered at location */
+            private Customer[] customers;
+            /** number of resistered customers */
+            private int customerCount;
+    
+            /**
+             * main application method
+             *
+             * @param args command line arguments
+             */
+            public static void Main(String[] args){
+    
+            }
+    
+            /**
+             * Constructor for objects of class Location
+             * 
+             * @param name the name of this location
+             *      Name must start with 2 capital letters for state abbreviation
+             *      This must be followed by 2 digit area number
+             *      This must be followed with city name, capitalized
+             */
+            public Location(String name)
+            {
+                // set constants
+                RESIZE_VALUE = 100;
+                MIN_HUMIDITY = 20;
+                MAX_HUMIDITY = 60;
+                SPEC_HUMIDITY = 29;
+                MIN_TEMPERATURE = 45;
+                MAX_TEMPERATURE = 70;
+                SPEC_TEMP_LOW = 49;
+                SPEC_TEMP_HIGH = 65;
+    
+                // initialize unit counts
+                rowsStandard = 7;
+                colsStandard = 10;
+                rowsHumidity = 3;
+                colsHumidity = 8;
+                rowsTemperature = 2;
+                colsTemperature = 6;
+    
+                // initialize prices
+                baseUnitPrice = 50.0; // arbitrarily set
+                standardFlatRate = 75.0;
+                humiditySquaredRate = 5.0;
+                temperatureCubedRate = 1.0;
+    
+                customerCount = 0;
+    
+                // check that name follows conventions
+                validateName(name);
+                this.name = name;
+                
+                cols = colsStandard + colsTemperature + colsHumidity;
+                customers = new Customer[RESIZE_VALUE];
+                units = new Unit[cols][];
+                
+                // initialize units
+                for(int col = 0; col < cols; col++){
                     if(col < colsStandard){
-                        units[col][row] = new StandardUnit(4, 8, 2, this);
+                        units[col] = new StandardUnit[rowsStandard];
+                        // initialize
+                        for(int i = 0; i < rowsStandard; i++){
+                            units[col][i] = new StandardUnit(4, 4, 2, this);
+                        }
                     }
                     else if(col < colsStandard + colsHumidity){
-                        units[col][row] = new HumidityUnit(4, 8, 2, this, 20);
+                        units[col] = new HumidityUnit[rowsHumidity];
+                        // initialize
+                        for(int i = 0; i < rowsHumidity; i++){
+                            units[col][i] = new HumidityUnit(4, 4, 2, this, 40);
+                        }
                     }
                     else{
-                        units[col][row] = new TemperatureUnit(4, 8, 2, this, 45);
+                        units[col] = new TemperatureUnit[rowsTemperature];
+                        // initialize
+                        for(int i = 0; i < rowsTemperature; i++){
+                            units[col][i] = new TemperatureUnit(4, 4, 2, this, 60);
+                        }
                     }
-                }
             }
         }
         
@@ -144,25 +153,8 @@ import java.text.DecimalFormat;
          * @param newName the attemped name
          */
         private void validateName(String newName){
-            
-            if(newName.length() < 5){
-                throw new IllegalArgumentException("Name does not fulfill parameters, not long enough");
-            }
-            
-            if(! newName.substring(0, 1).matches("[A-Z]")){
-                throw new IllegalArgumentException("First two characters must be capitals indicating state");
-            }
-            
-            if(! newName.substring(2, 3).matches("[0-9]")){
-                throw new IllegalArgumentException("Third and fourth characters must be integers");
-            }
-            
-            if(! Character.toString(newName.charAt(4)).matches("[A-Z]")){
-                throw new IllegalArgumentException("City must start with a capital letter");
-            }
-            
-            if(newName.length() > 5 && ! newName.substring(5).matches("[a-zA-Z]+")){
-                throw new IllegalArgumentException("City name must be in characters");
+            if(!newName.matches("[A-Z]{2}[0-9]{2}[A-Z]{1}[A-Za-z]{0,}")){ // place names can be 1 letter
+                throw new IllegalArgumentException("invalid name, check parameter comments");
             }
         }
     
@@ -278,9 +270,12 @@ import java.text.DecimalFormat;
                 start = colsStandard;
                 end = colsStandard + colsHumidity;
             }
-            else{ // temperature
+            else if(classType == units[colsStandard + colsHumidity][0].getClass()){ // temperature
                 start = colsStandard + colsHumidity;
                 end = cols;
+            }else{ // any
+                start = 0;
+                end = colsStandard + colsHumidity + colsTemperature;
             }
 
              // get number of units matching parameters
@@ -291,10 +286,10 @@ import java.text.DecimalFormat;
                      currentUnit = units[col][row];
                      currentCustomer = currentUnit.getCustomer();
                  
-                     if (customer == null){
+                     if (customer == null){ // if searching for class only
                          count++;
                      }             
-                     else if (customer == currentCustomer){
+                     else if (customer == currentCustomer){ // if searching for customer only
                         count++;
                      }
                  }                                                                 
@@ -307,7 +302,7 @@ import java.text.DecimalFormat;
          
              // fill in array            
              for(int col = start; col < units.length; col++){
-                 for(int row = 0; row < units[0].length; row++){
+                 for(int row = 0; row < units[col].length; row++){
                  
                      currentUnit = units[col][row];
                      currentCustomer = currentUnit.getCustomer();
@@ -375,6 +370,15 @@ import java.text.DecimalFormat;
             if(price > 0){
                 baseUnitPrice = price;
             }
+        }
+        
+        /**
+         * gets the price of a standard unit
+         *
+         * @return the standard unit price
+         */
+        public double standardFlatRate(){
+            return standardFlatRate;
         }
 
         /**

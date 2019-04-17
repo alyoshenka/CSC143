@@ -19,7 +19,7 @@ public class StandardUnit extends Unit {
      * @return the monthly price of the unit
      */
     public double getPrice(){
-        return getLocation().getBasePrice() + getLocation().getBasePrice();
+        return getLocation().getBasePrice() + getLocation().standardFlatRate();
     }
 
 }

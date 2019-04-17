@@ -1,3 +1,5 @@
+
+
 import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
@@ -154,12 +156,13 @@ public class LocationTest
     
     /**
      * tests charging monthly rent
+     * 
+     * also tests Unit -> StandardUnit cast
      */
     @Test
     public void testChargingRent(){
-        Unit rentingUnit = testLocation.getUnit(0, 2);
-        Unit rentingUnit2 = testLocation.getUnit(0, 3);
-        double testPrice = 3.4;
+        StandardUnit rentingUnit = (StandardUnit)testLocation.getUnit(0, 2);
+        StandardUnit rentingUnit2 = (StandardUnit)testLocation.getUnit(0, 4);
 
         // rent unit with standard price
         rentingUnit.rentUnit(jimDandy, LocalDate.now());
@@ -169,7 +172,7 @@ public class LocationTest
         testLocation.chargeMonthlyRent();
         
         // customer's balance should now be equal to unit price
-        assertEquals(rentingUnit.getPrice() + testPrice, jimDandy.getDebt(), ALLOWANCE);
+        assertEquals(rentingUnit.getPrice(), jimDandy.getDebt(), ALLOWANCE);
         
     }
 }

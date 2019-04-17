@@ -6,17 +6,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * The test class StandardUnitTest.
+ * The test class TemperatureUnitTest.
  *
  * @author  (your name)
  * @version (a version number or a date)
  */
-public class StandardUnitTest
+public class TemperatureUnitTest
 {
     /**
-     * Default constructor for test class StandardUnitTest
+     * Default constructor for test class TemperatureUnitTest
      */
-    public StandardUnitTest()
+    public TemperatureUnitTest()
     {
     }
 
@@ -38,5 +38,15 @@ public class StandardUnitTest
     @After
     public void tearDown()
     {
+    }
+    
+    /**
+     * tests validation
+     * 
+     * other tests have been run in humidityunit
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void validation(){
+        TemperatureUnit t = new TemperatureUnit(4, 4, 2, new Location("WA01Seattle"), 71);
     }
 }

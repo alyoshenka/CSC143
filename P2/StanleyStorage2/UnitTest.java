@@ -9,7 +9,8 @@ import java.time.LocalDate;
 
 
 /**
- * The test class UnitTest.
+ * StandardUnit test class
+ * Tests all non-specific unit things
  *
  * @author  Alexi Most
  * @version 1
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 public class UnitTest
 {
     /** a Unit to test against */
-    Unit testUnit;
+    StandardUnit testUnit;
     /** a Customer to test with */
     Customer testCustomer;
     /** double allowance */
@@ -101,7 +102,7 @@ public class UnitTest
         
         assertEquals(testCustomer, testUnit.getCustomer());
         assertEquals(currentTime, testUnit.getRentalDate());
-        assertEquals(5.5, testUnit.getPrice(), ALLOWANCE);
+        assertEquals(50 + 75, testUnit.getPrice(), ALLOWANCE);
     }
     
     
