@@ -4,6 +4,8 @@
 !.gitignore
 !.readme.md
 !.gitkeep
+!.bat
+!.jar
 !*.html
 !*.java
 !*.class
