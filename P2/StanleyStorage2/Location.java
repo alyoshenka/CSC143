@@ -68,15 +68,6 @@
             private int customerCount;
     
             /**
-             * main application method
-             *
-             * @param args command line arguments
-             */
-            public static void Main(String[] args){
-    
-            }
-    
-            /**
              * Constructor for objects of class Location
              * 
              * @param name the name of this location
@@ -97,12 +88,12 @@
                 SPEC_TEMP_HIGH = 65;
     
                 // initialize unit counts
-                rowsStandard = 7;
-                colsStandard = 10;
-                rowsHumidity = 3;
-                colsHumidity = 8;
-                rowsTemperature = 2;
-                colsTemperature = 6;
+                rowsStandard = 10;
+                colsStandard = 7;
+                rowsHumidity = 8;
+                colsHumidity = 3;
+                rowsTemperature = 6;
+                colsTemperature = 2;
     
                 // initialize prices
                 baseUnitPrice = 50.0; // arbitrarily set
@@ -411,13 +402,43 @@
         public double getTemperatureCubedPrice(){
             return temperatureCubedRate;
         }
+        
+        /**
+         * generates a unit map of the location
+         * 
+         * @return the string unit map
+         */
+        public String toUnitMap(){
+            String map = "\nUnit Map for " + name;
+            for(int col = 0; col < cols; col++){
+                map += "\n";
+                for(int row = 0; row < units[col].length; row++){
+                    if(col < colsStandard){
+                        map += "S";
+                    } else if(cols < colsStandard + colsHumidity){
+                        map += "H";
+                    } else{
+                        map += "T";
+                    }
+                    if(units[col][row].getCustomer() == null){
+                        map += "_";
+                    } else{
+                        map += "*";
+                    }
+                    map += " ";
+                }
+            }
+            map += "\n";
+                    
+            return map;
+        }
 
         /**
          * gets String representation of this object
          *
          * @return String representation of this object
          */
-        public String toString(){ // FINISH
+        public String toString(){
 
             // format doubles to 2 digits after decimal
             DecimalFormat df = new DecimalFormat("#.00");

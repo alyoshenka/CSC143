@@ -33,7 +33,7 @@ public class UnitTest
         ALLOWANCE = 0.00001;
         
         testCustomer = new Customer("Alexi Most", "0001112222");
-        testUnit = new StandardUnit(4, 8, 2, new Location("WA01Seattle"));
+        testUnit = new StandardUnit(8, 4, 2, new Location("WA01Seattle"));
     }
 
     
@@ -85,9 +85,9 @@ public class UnitTest
         
         assertEquals(50.0 + 75, s.getPrice(), ALLOWANCE);
         assertEquals(50.0 + 4 * 4 * 5, h.getPrice(), ALLOWANCE);
-        assertEquals(50.0 + 4 * 4 * 2 * 1 + 20, hp.getPrice(), ALLOWANCE);
-        // assertEquals(50.0 + 4 * 4 * 2 * 5, t.getPrice(), ALLOWANCE);
-        // assertEquals(50.0 + 4 * 4 * 2 * 5 + 30, tp.getPrice(), ALLOWANCE);
+        assertEquals(50.0 + 4 * 4 * 5 + 20, hp.getPrice(), ALLOWANCE);
+        assertEquals(50.0 + 4 * 4 * 2 * 1, t.getPrice(), ALLOWANCE);
+        assertEquals(50.0 + 4 * 4 * 2 * 1 + 30, tp.getPrice(), ALLOWANCE);
     }
     
     
@@ -98,7 +98,7 @@ public class UnitTest
     public void testRenting(){
         LocalDate currentTime = LocalDate.now();
         
-        testUnit.rentUnit(testCustomer, currentTime);
+        testUnit.rentUnit(testCustomer);
         
         assertEquals(testCustomer, testUnit.getCustomer());
         assertEquals(currentTime, testUnit.getRentalDate());
@@ -111,7 +111,7 @@ public class UnitTest
      */
     @Test
     public void testRelease(){
-        testUnit.rentUnit(testCustomer, LocalDate.now()); // just in case it didn't get called
+        testUnit.rentUnit(testCustomer); // just in case it didn't get called
         testUnit.releaseUnit();
         assertEquals(null, testUnit.getCustomer());
     }

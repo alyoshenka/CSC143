@@ -25,12 +25,12 @@ public abstract class Unit
     /**
      * Constructor for objects of class Unit
      *
-     * @param width    the width of the unit, multiple of 4, greater than 0
      * @param length   the length of the unit, multiple of 4, greater than 0
+     * @param width    the width of the unit, multiple of 4, greater than 0
      * @param height   the height of the unit, multiple of 2, greater than 0
      * @param location the location of this unit
      */
-    public Unit(int width, int length, int height, Location location)
+    public Unit(int length, int width, int height, Location location)
     {
         // validate dimensions
         if(width <= 0 || length <= 0 || height <= 0){
@@ -111,14 +111,13 @@ public abstract class Unit
     abstract double getPrice();
     
     /**
-     * rents the unit to a new customer
+     * rents the unit to a new customer at the current time
      * 
      * @param customer the customer
-     * @param date     the date rented
      */
-    public void rentUnit(Customer customer, LocalDate date){
+    public void rentUnit(Customer customer){
         this.customer = customer;
-        this.date = date;
+        this.date = LocalDate.now();
     }
     
     /** 

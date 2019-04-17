@@ -132,8 +132,8 @@ public class LocationTest
             // there should be (7 * 10 = ) 70 locations of each type
         assertEquals(70, (testLocation.getUnits(null, StandardUnit.class)).length);
             // rent units 
-        testLocation.getUnit(0, 0).rentUnit(johnDoe, LocalDate.now());
-        testLocation.getUnit(0, 1).rentUnit(johnDoe, LocalDate.now());
+        testLocation.getUnit(0, 0).rentUnit(johnDoe);
+        testLocation.getUnit(0, 1).rentUnit(johnDoe);
         assertEquals(2, (testLocation.getUnits(johnDoe, null)).length);
     }
     
@@ -165,9 +165,9 @@ public class LocationTest
         StandardUnit rentingUnit2 = (StandardUnit)testLocation.getUnit(0, 3);
 
         // rent unit with standard price
-        rentingUnit.rentUnit(jimDandy, LocalDate.now());
+        rentingUnit.rentUnit(jimDandy);
         // rent unit with given price
-        rentingUnit2.rentUnit(jimDandy, LocalDate.now());
+        rentingUnit2.rentUnit(jimDandy);
         
         testLocation.chargeMonthlyRent();
         

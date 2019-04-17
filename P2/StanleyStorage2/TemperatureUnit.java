@@ -37,7 +37,12 @@ public class TemperatureUnit extends Unit {
      * @return the monthly rate for this unit
      */
     public double getPrice() {
-        return getLocation().getBasePrice() + (getLocation().getTemperatureCubedPrice() * getLength() * getWidth() * getHeight());
+        double price = getLocation().getBasePrice() + (getLocation().getTemperatureCubedPrice() * getLength() * getWidth() * getHeight());
+        if(temperature >= getLocation().SPEC_TEMP_HIGH || temperature <= getLocation().SPEC_TEMP_LOW){
+            price += getLocation().getSpecialTemperaturePrice();
+        }
+         
+        return price;
     }
 
     /**
