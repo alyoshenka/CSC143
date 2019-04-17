@@ -43,7 +43,12 @@ public class HumidityUnit extends Unit{
      * @return the monthly rate for this unit
      */
     public double getPrice(){
-        return getLocation().getBasePrice() + (getLocation().getHumditySquaredPrice() * getLength() * getWidth());    }
+        double price = getLocation().getBasePrice() + (getLocation().getHumiditySquaredPrice() * getLength() * getWidth());
+        if(humidity <= getLocation().SPEC_HUMIDITY){
+            price += getLocation().getSpecialHumidityPrice();
+        }
+        return price;   
+    }
 
     /**
      * gets the humidity value

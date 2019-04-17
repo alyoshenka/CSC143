@@ -162,7 +162,7 @@ public class LocationTest
     @Test
     public void testChargingRent(){
         StandardUnit rentingUnit = (StandardUnit)testLocation.getUnit(0, 2);
-        StandardUnit rentingUnit2 = (StandardUnit)testLocation.getUnit(0, 4);
+        StandardUnit rentingUnit2 = (StandardUnit)testLocation.getUnit(0, 3);
 
         // rent unit with standard price
         rentingUnit.rentUnit(jimDandy, LocalDate.now());
@@ -172,7 +172,7 @@ public class LocationTest
         testLocation.chargeMonthlyRent();
         
         // customer's balance should now be equal to unit price
-        assertEquals(rentingUnit.getPrice(), jimDandy.getDebt(), ALLOWANCE);
+        assertEquals((75 + 50) * 2 * 0.95, jimDandy.getDebt(), ALLOWANCE);
         
     }
 }

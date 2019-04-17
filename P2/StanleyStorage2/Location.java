@@ -50,7 +50,7 @@
             /** price for special temperature */
             private double specialTemperaturePrice;
             /** discount for multiple units, percent expressed as decimal */
-            private double multiUnitDiscoount;
+            private double multiUnitDiscount;
             /** added rate for standard unit */
             private double standardFlatRate;
             /** added rate for humidity unit, multiplied by floor squared footage */
@@ -109,6 +109,9 @@
                 standardFlatRate = 75.0;
                 humiditySquaredRate = 5.0;
                 temperatureCubedRate = 1.0;
+                multiUnitDiscount = 0.05;
+                specialHumidityPrice = 20.0;
+                specialTemperaturePrice = 30.0;
     
                 customerCount = 0;
     
@@ -286,12 +289,9 @@
                      currentUnit = units[col][row];
                      currentCustomer = currentUnit.getCustomer();
                  
-                     if (customer == null){ // if searching for class only
+                     if (customer == null || currentCustomer == customer){ 
                          count++;
                      }             
-                     else if (customer == currentCustomer){ // if searching for customer only
-                        count++;
-                     }
                  }                                                                 
              }
 
@@ -301,16 +301,13 @@
              count = 0;
          
              // fill in array            
-             for(int col = start; col < units.length; col++){
+             for(int col = start; col < end; col++){
                  for(int row = 0; row < units[col].length; row++){
                  
                      currentUnit = units[col][row];
                      currentCustomer = currentUnit.getCustomer();
                  
-                     if(customer == null){
-                         tempUnits[count++] = currentUnit; // casting done from other side
-                     }
-                     else if(customer == currentCustomer){
+                     if(customer == null || currentCustomer == customer){
                          tempUnits[count++] = currentUnit; // casting done from other side
                      }
                 }
@@ -333,16 +330,15 @@
              Unit tempUnit;
 
              for(int col = 0; col < units.length; col++){
-                 for(int row = 0; row < units[0].length; row++){
+                 for(int row = 0; row < units[col].length; row++){
 
                      tempUnit = units[col][row];
                      tempCustomer = tempUnit.getCustomer();
 
                      if(tempCustomer != null){
                          // apply discount for multi-unit renters
-                         if(getUnits(tempCustomer, null).length >= 2){
-                             // MAKE MORE EFFICIENT
-                             tempCustomer.charge(tempUnit.getPrice() * (1.0 - multiUnitDiscoount));
+                         if(getUnits(tempCustomer, null).length > 1){
+                             tempCustomer.charge(tempUnit.getPrice() * (1.0 - multiUnitDiscount));
                          }else{
                              tempCustomer.charge(tempUnit.getPrice());
                          }
@@ -404,7 +400,7 @@
          *
          * @return humidity price per square foot
          */
-        public double getHumditySquaredPrice(){
+        public double getHumiditySquaredPrice(){
             return humiditySquaredRate;
         }
         /**
