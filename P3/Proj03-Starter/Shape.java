@@ -12,13 +12,14 @@ public class Shape implements Serializable {
     /** the points for this shape */
     private ArrayList<Point> points;
 
-    /** shape constructor
+    /**
+     * shape constructor
      *
      * @param name this shape's name, must not be null
      */
     public Shape(String name) {
         if(name == null){
-            throw new IllegalArumentException("shape name cannot be null");
+            throw new IllegalArgumentException("shape name cannot be null");
         }
         this.name = name;
         points = new ArrayList<Point>();
@@ -33,4 +34,12 @@ public class Shape implements Serializable {
         points.add(point);
     }
 
+    /**
+     * gets the name of the shape
+     *
+     * @return this shape's name
+     */
+    public String getName(){
+        return name;
+    }
 }

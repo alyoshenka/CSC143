@@ -6,8 +6,9 @@
 
 import java.util.Iterator;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
-public class ArrayList<E> implements Iterable<E> { // PRECONDITIONS
+public class ArrayList<E> { // PRECONDITIONS
 
     /** data of list */
     private E[] data;
@@ -15,14 +16,14 @@ public class ArrayList<E> implements Iterable<E> { // PRECONDITIONS
     private int capacity;
     /** the number of item E in the list */
     private int size;
-    /** the percentate the capacity increases by at resize */
+    /** the percentage the capacity increases by at resize */
     private double resizeValue;
 
     /**
      * default ArrayList constructor
      */
     public ArrayList() {
-        ArrayList(10); // CHECK
+        this(10); // CHECK
     }
 
     /**
@@ -34,37 +35,43 @@ public class ArrayList<E> implements Iterable<E> { // PRECONDITIONS
         this.capacity = capacity;
         size = 0;
         resizeValue =0.5; // CHECK
-        data = new E[capacity];
+        data = (E[]) new Object[capacity];
     }
 
     /**
      * iterator of this list
      */
-    private Iterator<E> iterator(){
+    private class ArrayListIterator implements Iterator<E>{
+
+        /** current index iteration is at */
+        private int idx;
+
         /**
          * iterator constructor
          */
-        Iterator<E> it = new Iterator<E>(){
-            /** current index iteration is at */
-            private int idx = 0;
+        public ArrayListIterator() {
+            idx = 0;
+        }
 
-            /**
-             * check if there is another item in list, allows nulls
-             *
-             * @return true if there is another element
-             */
-            public boolean hasNext(){
-                return idx < size; // allowing null values in list
-            }
+        /**
+         * check if there is another item in list, allows nulls
+         *
+         * @return true if there is another element
+         */
+        public boolean hasNext(){
+            return idx < size; // allowing null values in list
+        }
 
-            /**
-             * gets the next item in the array
-             *
-             * @return the next item in the array
-             */
-            public E next(){
-                return data[idx++];
+        /**
+         * gets the next item in the array
+         *
+         * @return the next item in the array
+         */
+        public E next(){
+            if(!hasNext()){
+                throw new NoSuchElementException("no more elements");
             }
+            return data[idx++];
         }
     }
 
@@ -84,7 +91,7 @@ public class ArrayList<E> implements Iterable<E> { // PRECONDITIONS
      */
     public String toString(){
         /** string representation */
-        String rep = "ArrayList of type " + E.getClass().getName() + " of size " + size
+        String rep = "ArrayList of size " + size
                 + "\nValues: \n";
         // add item strings
         for(int i = 0; i < size; i++){
@@ -92,7 +99,7 @@ public class ArrayList<E> implements Iterable<E> { // PRECONDITIONS
                 rep += "null\n";
             }
             else{
-                data += data[i].toString() + "\n";
+                rep += data[i].toString() + "\n";
             }
         }
 
@@ -126,10 +133,10 @@ public class ArrayList<E> implements Iterable<E> { // PRECONDITIONS
     /**
      * checks if the list contains a value
      *
-     * @param the value to check
+     * @param item the value to check
      * @return whether the list contains the value
      */
-    public bool contains(E item){
+    public boolean contains(E item){
         return indexOf(item) != -1;
     }
 
@@ -175,7 +182,10 @@ public class ArrayList<E> implements Iterable<E> { // PRECONDITIONS
      * @param idx the index to set to the new item
      */
     public void set(E item, int idx){
-        data[idx] = item;
+        if(checkIndex(idx)){
+            data[idx] = item;
+        }
+        // else do nothing
     }
 
     /**
@@ -192,9 +202,18 @@ public class ArrayList<E> implements Iterable<E> { // PRECONDITIONS
      */
     public void addAll(ArrayList<E> items){
         ensureCapacity(capacity + items.size());
-        for(int 0; i < items.size(); i++){ // MORE EFFICIENT
-            data[size++] = items[i];
+        for(int i = 0; i < items.size(); i++){ // MORE EFFICIENT
+            data[size++] = items.get(i);
         }
+    }
+
+    /**
+     * gets an iterator for this list
+     *
+     * @return the list's iterator
+     */
+    public ArrayListIterator iterator(){
+        return new ArrayListIterator();
     }
 
     /**
@@ -214,17 +233,17 @@ public class ArrayList<E> implements Iterable<E> { // PRECONDITIONS
      * ensures there is enough capacity for size * resizeValue
      */
     private void ensureCapacity(){
-        ensureCapacity(capacity * (1 + resizeValue));
+        ensureCapacity((int)Math.ceil(capacity * (1 + resizeValue)));
     }
 
     /**
-     * checks if given index is empty
+     * checks if given index is valid to access
      *
      * @param idx the index to check
-     * @return true if item at index is null
+     * @return true if valid index to access
      */
     private boolean checkIndex(int idx){
-        return data[idx] == null;
+        return idx >= 0 && idx < size;
     }
 
     /**
@@ -237,6 +256,21 @@ public class ArrayList<E> implements Iterable<E> { // PRECONDITIONS
             if(data[i] == null){
                 nullCtr++;
             }
+        }
+    }
+
+    /**
+     * gets an item at a specified index
+     *
+     * @param idx the index of the item
+     * @return item ar given index
+     */
+    public E get(int idx){
+        if(checkIndex(idx)){
+            return data[idx];
+        }
+        else{
+            return null;
         }
     }
 }
