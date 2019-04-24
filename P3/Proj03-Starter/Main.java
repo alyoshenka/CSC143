@@ -3,7 +3,6 @@ import java.io.File;
 public class Main {
     
     public static void main(String[] args)  {
-        Utility.createShapeLib();
         ShapeLibrary shapeLib  = new ShapeLibrary();
         Drawing drawing1 = new Drawing(shapeLib, new File("Instruct-Simple.txt"));
         Drawing drawing2 = new Drawing(shapeLib, new File("Instruct-Rand.txt"));

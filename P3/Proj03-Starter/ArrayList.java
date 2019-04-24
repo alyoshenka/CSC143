@@ -7,8 +7,9 @@
 import java.util.Iterator;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
+import java.io.Serializable;
 
-public class ArrayList<E> { // PRECONDITIONS
+public class ArrayList<E> implements Serializable, Iterable<E>{ // PRECONDITIONS
 
     /** data of list */
     private E[] data;
@@ -31,10 +32,11 @@ public class ArrayList<E> { // PRECONDITIONS
      *
      * @param capacity initial capacity
      */
+    @SuppressWarnings("unchecked")
     public ArrayList(int capacity){
         this.capacity = capacity;
         size = 0;
-        resizeValue =0.5; // CHECK
+        resizeValue = 0.5; // CHECK
         data = (E[]) new Object[capacity];
     }
 
@@ -73,6 +75,20 @@ public class ArrayList<E> { // PRECONDITIONS
             }
             return data[idx++];
         }
+
+        /**
+         * removes the current element from the array
+         */
+        public void remove(){ // CHECK
+            if(idx < 0){
+                throw new IllegalStateException("cannot remove from before start of list");
+            }
+            ArrayList.this.remove(idx--); // TEST
+            if(idx < 0){
+                idx = 0;
+            }
+        }
+
     }
 
     /**
@@ -227,13 +243,14 @@ public class ArrayList<E> { // PRECONDITIONS
             // make new array
             data = Arrays.copyOf(data, newCapacity);
         }
+        capacity = newCapacity;
     }
 
     /**
      * ensures there is enough capacity for size * resizeValue
      */
     private void ensureCapacity(){
-        ensureCapacity((int)Math.ceil(capacity * (1 + resizeValue)));
+        ensureCapacity((int)Math.ceil(capacity * (1 + resizeValue)) + 1);
     }
 
     /**

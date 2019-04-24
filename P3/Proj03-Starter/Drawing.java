@@ -34,11 +34,60 @@
  * accomplish these tasks.
  */
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 public class Drawing {
 
-    public Drawing() {
+    /** the canvas instructions for this drawing */
+    CanvasInstruction canvasInstruction;
+    /** the drawing instructions for this drawing */
+    ArrayList<DrawInstruction> drawInstructions;
+
+    public Drawing(ShapeLibrary shapeLib, File instructionFile) {
+        try {
+            Scanner sc = new Scanner(instructionFile);
+            canvasInstruction = CanvasInstruction.readFromFile(sc);
+            sc.close();
+        }
+        catch(FileNotFoundException e){
+            // WHAT TO DO
+        }
+
+        try{
+            Scanner sc = new Scanner(instructionFile);
+            while(sc.hasNext()){
+                drawInstructions.add(DrawInstruction.readFromFile(sc));
+            }
+        }
+        catch(FileNotFoundException e){
+
+        }
     }
 
-    
+    /**
+     * draws the canvas
+     */
+    private void drawCanvas(){
+
+    }
+
+    /**
+     * draws all the shapes in the drawInstructions arraylisr
+     */
+    private void drawShapes(){
+
+    }
+
+    /**
+     * draws the canvas and the shapes
+     */
+    public void draw(){
+        drawCanvas();
+        drawShapes();
+    }
+
+
 }
 

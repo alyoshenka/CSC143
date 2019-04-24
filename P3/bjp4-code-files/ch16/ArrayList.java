@@ -1,6 +1,6 @@
 // Class ArrayList<E> can be used to store a list of values of type E.
 
-import java.util.*;
+import java.util.*; // CHECK
 
 public class ArrayList<E> implements List<E> {
     private E[] elementData; // list of values
@@ -122,7 +122,7 @@ public class ArrayList<E> implements List<E> {
 
     // post: appends all values in the given list to the end of this list
     public void addAll(List<E> other) {
-        for (E value: other) {
+        for (E value : other) {
             add(value);
         }
     }

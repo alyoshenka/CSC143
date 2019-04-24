@@ -1,4 +1,4 @@
-public class Point  {
+public class Point implements java.io.Serializable {
 
     /** the point's x coordinate */
     private double x;
