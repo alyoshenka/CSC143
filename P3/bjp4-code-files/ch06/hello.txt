@@ -1,4 +1,0 @@
-Hello world.
-
-This program produces four
-lines of output.

@@ -1,6 +1,0 @@
-many      spaces 	  on	this      line!
-   there   are also	quite     a few of   them   here.
-   
-Let's remove  	some		 of    them with
-our 
- really  neat  			program.
