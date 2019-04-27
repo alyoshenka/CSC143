@@ -36,41 +36,48 @@
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
+import java.awt.Graphics;
 
 public class Drawing {
 
     /** the canvas instructions for this drawing */
-    CanvasInstruction canvasInstruction;
+    private CanvasInstruction canvasInstruction;
     /** the drawing instructions for this drawing */
-    ArrayList<DrawInstruction> drawInstructions;
+    private ArrayList<DrawInstruction> drawInstructions;
+    /** the drawingpanel */
+    private DrawingPanel drawingPanel;
+    /** the drawingpanel's graphics */
+    private Graphics graphics;
 
     public Drawing(ShapeLibrary shapeLib, File instructionFile) {
         try {
             Scanner sc = new Scanner(instructionFile);
+            drawInstructions = new ArrayList<DrawInstruction>();
             canvasInstruction = CanvasInstruction.readFromFile(sc);
+            
+            while(sc.hasNext()){
+                drawInstructions.add(DrawInstruction.readFromFile(sc)); // check
+            }
+            
             sc.close();
         }
         catch(FileNotFoundException e){
             // WHAT TO DO
         }
-
-        try{
-            Scanner sc = new Scanner(instructionFile);
-            while(sc.hasNext()){
-                drawInstructions.add(DrawInstruction.readFromFile(sc));
-            }
+        catch(IOException e){
+            
         }
-        catch(FileNotFoundException e){
-
-        }
+ 
     }
 
     /**
      * draws the canvas
      */
     private void drawCanvas(){
-
+        drawingPanel = new DrawingPanel(canvasInstruction.getWidth(), canvasInstruction.getHeight());
+        graphics = drawingPanel.getGraphics();
     }
 
     /**
