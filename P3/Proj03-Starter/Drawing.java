@@ -93,27 +93,57 @@ public class Drawing {
     }
 
     /**
+     * helper function to set canvas gradient
+     *
+     * @param start the start color
+     * @param end the end color
+     * @param gradientType the direction of gradient
+     *          // 0 = horizontal
+     *          // 1 = vertical
+     *          // 2 = diagonal from top left
+     *          // 3 = diagonal from top right
+     */
+    private void setGradient(Color start, Color end, int gradientType){
+        /** point to start color at */
+        Point startPoint;
+        /** point to end color at */
+        Point endPoint;
+
+        if(gradientType == 3){
+            startPoint = new Point(canvasInstruction.getWidth(), 0);
+            endPoint = new Point(0, canvasInstruction.getHeight());
+        }else{
+            startPoint = new Point(0,0);
+            endPoint = new Point(canvasInstruction.getWidth(), canvasInstruction.getHeight());
+        }
+
+        for(int y = 0; y < canvasInstruction.getHeight(); y++){
+            for(int x = 0; x < canvasInstruction.getWidth(); x++){
+
+            }
+        }
+    }
+
+    /**
      * draws all the shapes in the drawInstructions arraylisr
      */
     private void drawShapes(){
         for(DrawInstruction instruction : drawInstructions){
             Shape shape = shapeLibrary.getShape(instruction.getShapeName());
-            Polygon poly = new Polygon();
-            for(Point point : shape.getPoints()){
-                poly.addPoint((int)point.getX() * instruction.getScalePercent() / 100 + instruction.getStartingX(),
-                        (int)point.getY() * instruction.getScalePercent() / 100 + instruction.getStartingY()); // OK?
-            }
-            graphics.setColor(instruction.getColor());
-            if(instruction.getFilled()){
-                // graphics.setColor(instruction.getColor());
-                graphics.fillPolygon(poly);
-            } else{
-                //
-                graphics.drawPolygon(poly);
-            }
-
             for(int i = 0; i < instruction.getRepeats(); i++){
-                
+                Polygon poly = new Polygon();
+                for(Point point : shape.getPoints()){
+                    poly.addPoint((int)point.getX() * instruction.getScalePercent() / 100
+                                    + instruction.getStartingX() + instruction.getRepeatOffsetX() * i,
+                            (int)point.getY() * instruction.getScalePercent() / 100
+                                    + instruction.getStartingY() + instruction.getRepeatOffsetY() * i);
+                }
+                graphics.setColor(instruction.getColor());
+                if(instruction.getFilled()){
+                    graphics.fillPolygon(poly);
+                } else{
+                    graphics.drawPolygon(poly);
+                }
             }
         }
     }
