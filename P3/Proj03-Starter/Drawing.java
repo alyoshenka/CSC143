@@ -34,42 +34,61 @@
  * accomplish these tasks.
  */
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
+
+// todo
+// weird random placing
 
 public class Drawing {
 
     /** the canvas instructions for this drawing */
-    CanvasInstruction canvasInstruction;
+    private CanvasInstruction canvasInstruction;
     /** the drawing instructions for this drawing */
-    ArrayList<DrawInstruction> drawInstructions;
+    private ArrayList<DrawInstruction> drawInstructions;
+    /** the drawingpanel */
+    private DrawingPanel drawingPanel;
+    /** the drawingpanel's graphics */
+    private Graphics graphics;
+    /** the shape library to get shapes from */
+    private ShapeLibrary shapeLibrary;
 
     public Drawing(ShapeLibrary shapeLib, File instructionFile) {
+        shapeLibrary = shapeLib;
         try {
             Scanner sc = new Scanner(instructionFile);
+            drawInstructions = new ArrayList<DrawInstruction>();
             canvasInstruction = CanvasInstruction.readFromFile(sc);
+            
+            while(sc.hasNext()){
+                drawInstructions.add(DrawInstruction.readFromFile(sc)); // check
+            }
+            
             sc.close();
         }
         catch(FileNotFoundException e){
             // WHAT TO DO
         }
-
-        try{
-            Scanner sc = new Scanner(instructionFile);
-            while(sc.hasNext()){
-                drawInstructions.add(DrawInstruction.readFromFile(sc));
-            }
+        catch(IOException e){
+            
         }
-        catch(FileNotFoundException e){
-
-        }
+ 
     }
 
     /**
      * draws the canvas
      */
     private void drawCanvas(){
+        drawingPanel = new DrawingPanel(canvasInstruction.getWidth(), canvasInstruction.getHeight());
+        graphics = drawingPanel.getGraphics();
+        if(canvasInstruction.getIsGradient()){
+            drawingPanel.setBackground(canvasInstruction.getColorStart()); // no
+        } else{
+            drawingPanel.setBackground(canvasInstruction.getColorSolid());
+        }
 
     }
 
@@ -77,7 +96,26 @@ public class Drawing {
      * draws all the shapes in the drawInstructions arraylisr
      */
     private void drawShapes(){
+        for(DrawInstruction instruction : drawInstructions){
+            Shape shape = shapeLibrary.getShape(instruction.getShapeName());
+            Polygon poly = new Polygon();
+            for(Point point : shape.getPoints()){
+                poly.addPoint((int)point.getX() * instruction.getScalePercent() / 100 + instruction.getStartingX(),
+                        (int)point.getY() * instruction.getScalePercent() / 100 + instruction.getStartingY()); // OK?
+            }
+            graphics.setColor(instruction.getColor());
+            if(instruction.getFilled()){
+                // graphics.setColor(instruction.getColor());
+                graphics.fillPolygon(poly);
+            } else{
+                //
+                graphics.drawPolygon(poly);
+            }
 
+            for(int i = 0; i < instruction.getRepeats(); i++){
+                
+            }
+        }
     }
 
     /**

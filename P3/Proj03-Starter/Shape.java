@@ -11,6 +11,8 @@ public class Shape implements Serializable {
     private String name;
     /** the points for this shape */
     private ArrayList<Point> points;
+    /** the class version */
+    public static final long serialVersionUID = 1;
 
     /**
      * shape constructor
@@ -41,5 +43,14 @@ public class Shape implements Serializable {
      */
     public String getName(){
         return name;
+    }
+
+    /**
+     * gets the points in this shape
+     *
+     * @return the points for this shape
+     */
+    public ArrayList<Point> getPoints(){
+        return points;
     }
 }
