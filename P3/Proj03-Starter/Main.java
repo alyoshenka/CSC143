@@ -1,11 +1,12 @@
 import java.io.File;
 
-import java.awt.*;
+//todo
+// close files
 
 public class Main {
     
     public static void main(String[] args)  {
-        ShapeLibrary shapeLib  = new ShapeLibrary();
+        ShapeLibrary shapeLib  = new ShapeLibrary(new File("shapes"));
         Drawing drawing1 = new Drawing(shapeLib, new File("Instruct-Simple.txt"));
         Drawing drawing2 = new Drawing(shapeLib, new File("Instruct-Rand.txt"));
         Drawing drawing3 = new Drawing(shapeLib, new File("Instruct-RepeatOffset.txt"));

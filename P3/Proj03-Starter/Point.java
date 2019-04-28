@@ -33,7 +33,7 @@ public class Point implements java.io.Serializable {
 
     /**
      * Set the y-coordinate of this Point
-     * @param newY  the new y-coordinate
+     * @param updateY  the new y-coordinate
      */
     public void setY(double updateY) {
         y = updateY;
@@ -85,7 +85,7 @@ public class Point implements java.io.Serializable {
 
     /**
      * Find the midpoint between this Point and another Point
-     * @param p the other Point
+     * @param other the other Point
      * @return  the Point midway between this Point and the specified one
      */
     public Point midPoint(Point other) {

@@ -34,11 +34,14 @@
  * accomplish these tasks.
  */
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
-import java.awt.Graphics;
+
+// todo
+// weird random placing
 
 public class Drawing {
 
@@ -50,8 +53,11 @@ public class Drawing {
     private DrawingPanel drawingPanel;
     /** the drawingpanel's graphics */
     private Graphics graphics;
+    /** the shape library to get shapes from */
+    private ShapeLibrary shapeLibrary;
 
     public Drawing(ShapeLibrary shapeLib, File instructionFile) {
+        shapeLibrary = shapeLib;
         try {
             Scanner sc = new Scanner(instructionFile);
             drawInstructions = new ArrayList<DrawInstruction>();
@@ -78,13 +84,38 @@ public class Drawing {
     private void drawCanvas(){
         drawingPanel = new DrawingPanel(canvasInstruction.getWidth(), canvasInstruction.getHeight());
         graphics = drawingPanel.getGraphics();
+        if(canvasInstruction.getIsGradient()){
+            drawingPanel.setBackground(canvasInstruction.getColorStart()); // no
+        } else{
+            drawingPanel.setBackground(canvasInstruction.getColorSolid());
+        }
+
     }
 
     /**
      * draws all the shapes in the drawInstructions arraylisr
      */
     private void drawShapes(){
+        for(DrawInstruction instruction : drawInstructions){
+            Shape shape = shapeLibrary.getShape(instruction.getShapeName());
+            Polygon poly = new Polygon();
+            for(Point point : shape.getPoints()){
+                poly.addPoint((int)point.getX() * instruction.getScalePercent() / 100 + instruction.getStartingX(),
+                        (int)point.getY() * instruction.getScalePercent() / 100 + instruction.getStartingY()); // OK?
+            }
+            graphics.setColor(instruction.getColor());
+            if(instruction.getFilled()){
+                // graphics.setColor(instruction.getColor());
+                graphics.fillPolygon(poly);
+            } else{
+                //
+                graphics.drawPolygon(poly);
+            }
 
+            for(int i = 0; i < instruction.getRepeats(); i++){
+                
+            }
+        }
     }
 
     /**
