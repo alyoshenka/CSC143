@@ -1,9 +1,14 @@
+/**
+ * represents a coordinate point
+ */
 public class Point implements java.io.Serializable {
 
     /** the point's x coordinate */
     private double x;
     /** the point's y coordinate */
-    private double y; 
+    private double y;
+    /** the class version */
+    public static final long serialVersionUID = 1;
 
     /**
      * Create a Point at (0, 0)
@@ -119,5 +124,15 @@ public class Point implements java.io.Serializable {
             Point otherPoint = (Point)other;
             return this.x == otherPoint.x && this.y == otherPoint.y;
         }
+    }
+
+    /**
+     * gets a hashcode for this object
+     *
+     * @return the hashcode for this object
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

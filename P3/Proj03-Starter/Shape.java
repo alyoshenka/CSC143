@@ -5,6 +5,9 @@
 import java.io.Serializable;
 import java.lang.IllegalArgumentException;
 
+/**
+ * a series of points associated with a name
+ */
 public class Shape implements Serializable {
 
     /** the name of this shape */

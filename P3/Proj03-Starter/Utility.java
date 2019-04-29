@@ -147,7 +147,7 @@ public class Utility {
      * @throws              FileNotFoundException if a shape file can't be written
      * @throws              IOException if errors occur during serialization of a shape file
      */
-    private static void writeShapes(ArrayList<Shape> shapeList) throws FileNotFoundException, IOException {
+    public static void writeShapes(ArrayList<Shape> shapeList) throws FileNotFoundException, IOException {
 
         // Get the path to the current project folder, use it to create the shapes subfolder
         // This will succeed regardless of whether the folder already exists

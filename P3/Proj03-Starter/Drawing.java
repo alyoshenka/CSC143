@@ -39,10 +39,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 // todo
 // weird random placing
 
+/**
+ * represents a full drawing with canvas and shapes
+ */
 public class Drawing {
 
     /** the canvas instructions for this drawing */
@@ -56,26 +60,26 @@ public class Drawing {
     /** the shape library to get shapes from */
     private ShapeLibrary shapeLibrary;
 
+    /**
+     * Drawing constructor
+     * @param shapeLib the ShapeLibrary this Drawing uses
+     * @param instructionFile the InstructionFile to read from
+     */
     public Drawing(ShapeLibrary shapeLib, File instructionFile) {
         shapeLibrary = shapeLib;
         try {
             Scanner sc = new Scanner(instructionFile);
-            drawInstructions = new ArrayList<DrawInstruction>();
+            drawInstructions = new ArrayList<DrawInstruction>(10);
             canvasInstruction = CanvasInstruction.readFromFile(sc);
             
             while(sc.hasNext()){
-                drawInstructions.add(DrawInstruction.readFromFile(sc)); // check
+                drawInstructions.add(DrawInstruction.readFromFile(sc));
             }
-            
             sc.close();
         }
-        catch(FileNotFoundException e){
-            // WHAT TO DO
-        }
         catch(IOException e){
-            
+            System.out.println("File IO Exception");
         }
- 
     }
 
     /**
@@ -85,11 +89,11 @@ public class Drawing {
         drawingPanel = new DrawingPanel(canvasInstruction.getWidth(), canvasInstruction.getHeight());
         graphics = drawingPanel.getGraphics();
         if(canvasInstruction.getIsGradient()){
-            drawingPanel.setBackground(canvasInstruction.getColorStart()); // no
+            setGradient(canvasInstruction.getColorStart(), canvasInstruction.getColorEnd(),
+                    canvasInstruction.getGradientDirection());
         } else{
             drawingPanel.setBackground(canvasInstruction.getColorSolid());
         }
-
     }
 
     /**
@@ -104,39 +108,124 @@ public class Drawing {
      *          // 3 = diagonal from top right
      */
     private void setGradient(Color start, Color end, int gradientType){
-        /** point to start color at */
-        Point startPoint;
-        /** point to end color at */
-        Point endPoint;
 
-        if(gradientType == 3){
-            startPoint = new Point(canvasInstruction.getWidth(), 0);
-            endPoint = new Point(0, canvasInstruction.getHeight());
-        }else{
-            startPoint = new Point(0,0);
-            endPoint = new Point(canvasInstruction.getWidth(), canvasInstruction.getHeight());
-        }
+        /** canvas height */
+        int height = 0;
+        /** canvas width */
+        int width = 0;
+        switch(gradientType){
 
-        for(int y = 0; y < canvasInstruction.getHeight(); y++){
-            for(int x = 0; x < canvasInstruction.getWidth(); x++){
-
-            }
+            case 0:
+                height = drawingPanel.getHeight();
+                width = drawingPanel.getWidth();
+                for(int y = 0; y < height; y++){
+                    for(int x = 0; x < width; x++){
+                        drawingPanel.setPixel(x, y, colorLerp(start, end, y * 1.0f / height));
+                    }
+                }
+                break;
+            case 1:
+                height = drawingPanel.getHeight();
+                width = drawingPanel.getWidth();
+                for(int x = 0; x < width; x++){
+                    for(int y = 0; y < height; y++){
+                        drawingPanel.setPixel(x, y, colorLerp(start, end, x * 1.0f / width));
+                    }
+                }
+                break;
+            case 2:
+                height = drawingPanel.getHeight();
+                width = drawingPanel.getWidth();
+                for(int y = 0; y < height; y++){
+                    for(int x = 0; x < width; x++){
+                        float t = (y * 0.5f / height) + (x * 0.5f / width);
+                        drawingPanel.setPixel(x, y, colorLerp(start, end, floatLerp(0f, 1f, t)));
+                    }
+                }
+                break;
+            case 3:
+                height = drawingPanel.getHeight();
+                width = drawingPanel.getWidth();
+                for(int x = 0; x < width; x++){
+                    for(int y = 0; y < height; y++){
+                        float t = (y * 0.5f / height) + (0.5f - (x * 0.5f / width));
+                        drawingPanel.setPixel(x, y, colorLerp(start, end, floatLerp(0f, 1f, t)));
+                    }
+                }
+                break;
+            default:
+                System.out.println("Invalid gradient specified: " + gradientType);
         }
     }
 
     /**
-     * draws all the shapes in the drawInstructions arraylisr
+     * gets a linear interpolation of two colors
+     *
+     * @param c1 the first color
+     * @param c2 the second color
+     * @param t the percentage of c2 (0-1)
+     * @return a color that is (t*100)%  between c1 and c2
+     */
+    private Color colorLerp(Color c1, Color c2, float t){
+        if(t < 0){
+            t = 0;
+        }
+        if(t > 1){
+            t = 1;
+        }
+        float r = c1.getRed() + t * (c2.getRed() - c1.getRed());
+        float g = c1.getGreen() + t * (c2.getGreen() - c1.getGreen());
+        float b = c1.getBlue() + t * (c2.getBlue() - c1.getBlue());
+        float a = c1.getAlpha() + t * (c2.getAlpha() - c1.getAlpha());
+        if(r > 255){
+            r = 255;
+        }
+        if(g > 255){
+            g = 255;
+        }
+        if(b > 255){
+            b = 255;
+        }
+        if(a > 255){
+            a = 255f;
+        }
+        return new Color(r/255,g/255,b/255,a/255);
+    }
+
+    /**
+     * gets a linear interpolation of 2 floats
+     *
+     * @param i1 the first float
+     * @param i2 the second float
+     * @param t the percentage of i2 (0-1)
+     * @return an float that is (t*100)%  between i1 and i2
+     */
+    private float floatLerp(float i1, float i2, float t){
+        return i1 + t * (i2 - i1);
+    }
+
+    /**
+     * draws all the shapes in the drawInstructions arraylist
      */
     private void drawShapes(){
         for(DrawInstruction instruction : drawInstructions){
             Shape shape = shapeLibrary.getShape(instruction.getShapeName());
             for(int i = 0; i < instruction.getRepeats(); i++){
                 Polygon poly = new Polygon();
+                int x = instruction.getStartingX();
+                int y = instruction.getStartingY();
+                if(x == Integer.MIN_VALUE) {
+                    x = ThreadLocalRandom.current().nextInt(0, canvasInstruction.getWidth() + 1);
+                }
+                if(y == Integer.MIN_VALUE) {
+                    y = ThreadLocalRandom.current().nextInt(0, canvasInstruction.getHeight() + 1);
+                }
                 for(Point point : shape.getPoints()){
-                    poly.addPoint((int)point.getX() * instruction.getScalePercent() / 100
-                                    + instruction.getStartingX() + instruction.getRepeatOffsetX() * i,
-                            (int)point.getY() * instruction.getScalePercent() / 100
-                                    + instruction.getStartingY() + instruction.getRepeatOffsetY() * i);
+                    int ptX = (int)point.getX() * instruction.getScalePercent() / 100
+                            + x + instruction.getRepeatOffsetX() * i;
+                    int ptY = (int)point.getY() * instruction.getScalePercent() / 100
+                            + y + instruction.getRepeatOffsetY() * i;
+                    poly.addPoint(ptX, ptY);
                 }
                 graphics.setColor(instruction.getColor());
                 if(instruction.getFilled()){

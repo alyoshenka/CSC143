@@ -9,7 +9,11 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.io.Serializable;
 
-public class ArrayList<E> implements Serializable, Iterable<E>{ // PRECONDITIONS
+/**
+ * generic class to represent a list of items
+ * @param <E> the type of items
+ */
+public class ArrayList<E> implements Serializable, Iterable<E>{
 
     /** data of list */
     private E[] data;
@@ -19,12 +23,14 @@ public class ArrayList<E> implements Serializable, Iterable<E>{ // PRECONDITIONS
     private int size;
     /** the percentage the capacity increases by at resize */
     private double resizeValue;
+    /** the class version */
+    public static final long serialVersionUID = 1;
 
     /**
-     * default ArrayList constructor
+     * default ArrayList constructor, initialized to 50
      */
     public ArrayList() {
-        this(10); // CHECK
+        this(50);
     }
 
     /**
@@ -34,6 +40,9 @@ public class ArrayList<E> implements Serializable, Iterable<E>{ // PRECONDITIONS
      */
     @SuppressWarnings("unchecked")
     public ArrayList(int capacity){
+        if(capacity < 0){
+            capacity = 0;
+        }
         this.capacity = capacity;
         size = 0;
         resizeValue = 0.5; // CHECK
@@ -61,7 +70,7 @@ public class ArrayList<E> implements Serializable, Iterable<E>{ // PRECONDITIONS
          * @return true if there is another element
          */
         public boolean hasNext(){
-            return idx < size; // allowing null values in list
+            return idx < size;
         }
 
         /**
@@ -83,7 +92,7 @@ public class ArrayList<E> implements Serializable, Iterable<E>{ // PRECONDITIONS
             if(idx < 0){
                 throw new IllegalStateException("cannot remove from before start of list");
             }
-            ArrayList.this.remove(idx--); // TEST
+            ArrayList.this.remove(idx - 1); // TEST
             if(idx < 0){
                 idx = 0;
             }
@@ -212,18 +221,6 @@ public class ArrayList<E> implements Serializable, Iterable<E>{ // PRECONDITIONS
     }
 
     /**
-     * adds all items of a list to this list
-     *
-     * @param items the list of items to add
-     */
-    public void addAll(ArrayList<E> items){
-        ensureCapacity(capacity + items.size());
-        for(int i = 0; i < items.size(); i++){ // MORE EFFICIENT
-            data[size++] = items.get(i);
-        }
-    }
-
-    /**
      * gets an iterator for this list
      *
      * @return the list's iterator
@@ -269,11 +266,12 @@ public class ArrayList<E> implements Serializable, Iterable<E>{ // PRECONDITIONS
     public void compressNulls(){ // TEST
         int nullCtr = 0;
         for(int i = 0; i < size; i++){
-            data[i] = data[i-nullCtr];
+            data[i-nullCtr] = data[i];
             if(data[i] == null){
                 nullCtr++;
             }
         }
+        size -= nullCtr;
     }
 
     /**

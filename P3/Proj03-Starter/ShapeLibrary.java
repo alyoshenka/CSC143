@@ -6,11 +6,19 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
+/**
+ * stores the available shapes
+ */
 public class ShapeLibrary {
 
     /** the shapes in this library */
     private ArrayList<Shape> shapes;
 
+    /**
+     * constructs a ShapeLibrary from a File
+     *
+     * @param directory the file to create shapes from
+     */
     public ShapeLibrary(File directory) {
         shapes = new ArrayList<Shape>();
         for(File file : directory.listFiles()){
