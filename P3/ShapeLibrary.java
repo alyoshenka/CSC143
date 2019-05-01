@@ -19,9 +19,9 @@ public class ShapeLibrary {
      *
      * @param directory the file to create shapes from
      */
-    public ShapeLibrary(File directory) {
+    public ShapeLibrary() {
         shapes = new ArrayList<Shape>();
-        for(File file : directory.listFiles()){
+        for(File file : (new File("shapes")).listFiles()){
             if (file.isFile() && file.getName().endsWith(".shp")) {
                 try{
                     FileInputStream fileIn = new FileInputStream(file);

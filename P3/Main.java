@@ -20,7 +20,7 @@ public class Main {
             createShapes();
         }
         catch(Exception e){}
-        ShapeLibrary shapeLib = new ShapeLibrary(new File("shapes"));
+        ShapeLibrary shapeLib = new ShapeLibrary();
 
         Drawing drawing1 = new Drawing(shapeLib, new File("Instruct-Simple.txt"));
         Drawing drawing2 = new Drawing(shapeLib, new File("Instruct-Rand.txt"));
