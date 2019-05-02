@@ -1,0 +1,3 @@
+width=200, height=500, gradDir=2, gradStartRed=153, gradStartGreen=255, gradStartBlue=255, gradEndRed=153, gradEndGreen=153, gradEndBlue=255
+shape=arrowhead, x=-2147483648, y=-2147483648, scale=10, filled=true, rep=40
+shape=heart, x=-2147483648, y=-2147483648, scale=50, red=255, green=255, blue=255, filled=true, rep=10

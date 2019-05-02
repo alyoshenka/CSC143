@@ -16,8 +16,6 @@ public class ShapeLibrary {
 
     /**
      * constructs a ShapeLibrary from a File
-     *
-     * @param directory the file to create shapes from
      */
     public ShapeLibrary() {
         shapes = new ArrayList<Shape>();

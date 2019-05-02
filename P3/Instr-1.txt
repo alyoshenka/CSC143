@@ -1,0 +1,2 @@
+width=400, height=400, red=0, green=255, blue=204
+shape=octagon, x=10, y=10, scale=10, filled=true, rep=20, repOffX=20, repOffY=20

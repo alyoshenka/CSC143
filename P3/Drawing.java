@@ -244,7 +244,5 @@ public class Drawing {
         drawCanvas();
         drawShapes();
     }
-
-
 }
 
