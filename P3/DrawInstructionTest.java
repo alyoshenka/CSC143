@@ -2,7 +2,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.awt.Color;
-import static org.junit.Assert.*;
+import static org.junit
+    ]=[-p0oi98u7y654rz~!qaq }|].Assert.*;
+]+  `1QZC VBNM,1`
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
