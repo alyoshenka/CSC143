@@ -1,5 +1,5 @@
 /** a linked list with objects of type E */
-public class LinkedList<E> implements System.Serializable {
+public class LinkedList<E> implements java.io.Serializable {
     /** the start of the list */
     private Node head;
     /** the end of the list */
@@ -78,7 +78,13 @@ public class LinkedList<E> implements System.Serializable {
      * @param item the item to add
      */
     public void add(E item){
-
+        Node newNode = new Node();
+        newNode.prev = tail;
+        newNode.next = null;
+        newNode.data = item;
+        tail.next = newNode;
+        tail = newNode;
+        size++;
     }
 
     /**
@@ -89,7 +95,17 @@ public class LinkedList<E> implements System.Serializable {
      * @return whether the add was successful, ie idx within bounds
      */
     public boolean addAt(E item, int idx){
-
+        int i;
+        Node next;
+        Node current = head;
+        for(i = 0; i < idx; i++){
+            if(null == current.next){
+                break;
+            }
+            current = current.next;
+        }
+        next = current.next;
+        
     }
 
     /**
@@ -99,7 +115,7 @@ public class LinkedList<E> implements System.Serializable {
      * @return whether removing was successful, ie item was found
      */
     public boolean remove(E item){
-
+        return false;
     }
 
     /**
@@ -109,7 +125,7 @@ public class LinkedList<E> implements System.Serializable {
      * @return whether removing was successful, ie idx was in range
      */
     public boolean remove(int idx){
-
+        return false;
     }
 
     /**
@@ -123,6 +139,6 @@ public class LinkedList<E> implements System.Serializable {
      * @return whether move was successful
      */
     public boolean move(E item, int positions){
-
+        return false;
     }
 }
