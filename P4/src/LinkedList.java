@@ -59,14 +59,14 @@ public class LinkedList<E> implements java.io.Serializable {
      * @param idx the index to get data from
      * @return the data at specified index, null if out of bounds
      */
-    public E dataAt(int idx){
+    public E dataAt(int idx){ // iterate backwards for efficiency
         if(idx < 0 || idx >= size){
             return null;
         }
 
         // iterate through list
         Node current = head;
-        for(int i = 0; i <= idx; i++){
+        for(int i = 0; i < idx; i++){
             current = current.next;
         }
         return current.data;
@@ -79,11 +79,17 @@ public class LinkedList<E> implements java.io.Serializable {
      */
     public void add(E item){
         Node newNode = new Node();
-        newNode.prev = tail;
         newNode.next = null;
         newNode.data = item;
-        tail.next = newNode;
-        tail = newNode;
+        if(null == head) { // && null == tail is implied
+            head = newNode;
+            tail = newNode;
+            newNode.prev = null;
+        }else{
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+        }
         size++;
     }
 
@@ -95,27 +101,51 @@ public class LinkedList<E> implements java.io.Serializable {
      * @return whether the add was successful, ie idx within bounds
      */
     public boolean addAt(E item, int idx){
-        int i;
+        if(null == head || idx > size){
+            add(item);
+            return 0 == idx;
+        }
+
         Node next;
         Node current = head;
-        for(i = 0; i < idx; i++){
+        for(int i = 0; i < idx; i++){
             if(null == current.next){
                 break;
             }
             current = current.next;
         }
         next = current.next;
-        
+        if(null == next){ // not needed (?)
+            add(item);
+            return false;
+        } else{
+            Node newNode = new Node();
+            newNode.next = next;
+            newNode.prev = current;
+            newNode.data = item;
+            next.prev = newNode;
+            current.next = newNode;
+            size++;
+            return true;
+        }
     }
 
     /**
-     * removes an item from the list
+     * removes all instances of an item from the list
      *
      * @param item the item to remove
      * @return whether removing was successful, ie item was found
      */
     public boolean remove(E item){
-        return false;
+        boolean found = false;
+        for(Node n = head; null != n; n = n.next){
+            if(n.data == item){
+                n.prev.next = n.next;
+                n.next.prev = n.prev;
+                found = true;
+            }
+        }
+        return found;
     }
 
     /**
@@ -125,20 +155,108 @@ public class LinkedList<E> implements java.io.Serializable {
      * @return whether removing was successful, ie idx was in range
      */
     public boolean remove(int idx){
-        return false;
+        Node current = head;
+        for(int i = 0; i < idx; i++){
+            if(null == current){
+                return false;
+            }
+            current = current.next;
+        }
+        current.prev.next = current.next;
+        current.next.prev = current.prev;
+        return true;
     }
 
     /**
-     * moves an item up in the list
+     * moves an item in the list
      *      will return false if item not in list or spaces out of bounds
      *      if spaces out of bounds, item will still be moved as many spaces
      *      as it can
      *
      * @param item the item to move
-     * @param positions the number of spaces to move
+     * @param positions the number of spaces to move (can be negative)
      * @return whether move was successful
      */
-    public boolean move(E item, int positions){
-        return false;
+    public boolean move(E item, int positions){ // check bad positions
+        if(positions == 0){
+            return true;
+        }
+        boolean found = false;
+        Node active;
+        for(active = head; null != active; active = active.next){
+            if(active.data.equals(item)){
+                found = true;
+                break;
+            }
+        }
+        if(!found){
+            return false;
+        }
+        active.prev.next = active.next;
+        if(active != tail){
+            active.next.prev = active.prev;
+        }
+        Node current = active;
+        for(int i = 0; i != positions; i += positions > 0 ? 1 : -1){
+            current = positions > 0 ? current.next : current.prev;
+        }
+        active.next = current.next;
+        active.prev = current;
+        current.next = active;
+        return found;
+    }
+
+    /**
+     * moves an item down the list
+     *
+     * @param item the item to move
+     * @param positions the number of positions to move it
+     *                  will move as many as possible if out of bounds
+     * @return whether moving was successful, ie item found and positions within range
+     */
+    public boolean moveDown(E item, int positions){
+        if(positions < 0){
+            return false;
+        }
+        if(0 == positions){
+            return true;
+        }
+        boolean found = false;
+        Node active;
+        for(active = head; null != active; active = active.next){
+           if(active.data.equals(item)){
+               found = true;
+               break;
+           }
+        }
+        if(!found){
+            return false;
+        }
+        Node current = active;
+        for(int i = 0; i < positions; i++){
+            current = current.next;
+            if(i + positions > size){
+                found = false;
+                break;
+            }
+        }
+        active.next = current.next;
+        active.prev = current.prev;
+        active.prev.next = active;
+        active.next.prev = active;
+        return found;
+    }
+
+    /**
+     * makes a string representation of this object
+     *
+     * @return the String representation of this object
+     */
+    public String toString(){
+        String s = "Size: " + size + " Data:";
+        for(Node n = head; null != n; n = n.next){
+            s += " " + n.data;
+        }
+        return s;
     }
 }
