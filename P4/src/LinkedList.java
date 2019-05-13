@@ -168,45 +168,6 @@ public class LinkedList<E> implements java.io.Serializable {
     }
 
     /**
-     * moves an item in the list
-     *      will return false if item not in list or spaces out of bounds
-     *      if spaces out of bounds, item will still be moved as many spaces
-     *      as it can
-     *
-     * @param item the item to move
-     * @param positions the number of spaces to move (can be negative)
-     * @return whether move was successful
-     */
-    public boolean move(E item, int positions){ // check bad positions
-        if(positions == 0){
-            return true;
-        }
-        boolean found = false;
-        Node active;
-        for(active = head; null != active; active = active.next){
-            if(active.data.equals(item)){
-                found = true;
-                break;
-            }
-        }
-        if(!found){
-            return false;
-        }
-        active.prev.next = active.next;
-        if(active != tail){
-            active.next.prev = active.prev;
-        }
-        Node current = active;
-        for(int i = 0; i != positions; i += positions > 0 ? 1 : -1){
-            current = positions > 0 ? current.next : current.prev;
-        }
-        active.next = current.next;
-        active.prev = current;
-        current.next = active;
-        return found;
-    }
-
-    /**
      * moves the first occurrence of an item down the list
      *
      * @param item the item to move
@@ -228,7 +189,11 @@ public class LinkedList<E> implements java.io.Serializable {
         Node moving;
         for(moving = head; null != moving; moving = moving.next){
            if(moving.data.equals(item)){
-               moving.prev.next = moving.next;
+               if(moving == head){
+                   head = moving.next;
+               }else{
+                   moving.prev.next = moving.next;
+               }
                moving.next.prev = moving.prev;
                found = true;
                break;
@@ -247,18 +212,87 @@ public class LinkedList<E> implements java.io.Serializable {
             if(null == current.next){
                 tail.next = moving; // is copy so should have prev but check
                 moving.prev = tail;
+                moving.next = null;
+                tail = moving;
                 return false;
             }
             current = current.next;
         }
 
+        moving.next = current.next;
         // if at end
         if(null == current.next){
             tail = moving;
+        }else{
+            moving.next.prev = moving;
         }
-        moving.next = current.next;
         current.next = moving;
         moving.prev = current;
+
+        return true;
+    }
+
+    /**
+     * moves the last occurrence of an item up the list
+     *
+     * @param item the item to move
+     * @param positions the number of positions to move it
+     *                  will move as many as possible if out of bounds
+     * @return whether moving was successful, ie item found and positions within range
+     */
+    public boolean moveUp(E item, int positions){
+        // preconditions
+        if(positions < 0){
+            return false;
+        }
+        if(0 == positions){
+            return true;
+        }
+
+        // find item
+        boolean found = false;
+        Node moving;
+        for(moving = tail; null != moving; moving = moving.prev){
+           if(moving.data.equals(item)){
+               // take out item
+               if(moving == tail){
+                   tail = moving.prev;
+               }else{
+                   moving.next.prev = moving.prev;
+               }
+               moving.prev.next = moving.next;
+               found = true;
+               break;
+           }
+        }
+
+        // item not in list or at beginning of list
+        if(!found || moving == head){
+            return false;
+        }
+
+        // iterate to position
+        Node current = moving;
+        for(int i = 0; i < positions; i++){
+            // if at head
+            if(null == current.prev){
+                head.prev = moving; // is copy so should have next but check
+                moving.next = head;
+                moving.prev = null;
+                head = moving;
+                return false;
+            }
+            current = current.prev;
+        }
+
+        // if at beginning
+        if(null == current.prev){
+            head = moving;
+        }
+        moving.prev = current.prev;
+        moving.prev.next = moving;
+        moving.next = current;
+        current.prev = moving;
 
         return true;
     }
@@ -274,5 +308,26 @@ public class LinkedList<E> implements java.io.Serializable {
             s += " " + n.data;
         }
         return s;
+    }
+
+    public void forward(){
+        for(Node n = head; null != n; n = n.next){
+            System.out.print(n.data + " ");
+        }
+        System.out.println();
+    }
+
+    public void backward(){
+        for(Node n = tail; null != n; n = n.prev){
+            System.out.print(n.data + " ");
+        }
+        System.out.println();
+    }
+
+    public void BOF(){
+        System.out.println();
+        forward();
+        backward();
+        System.out.println();
     }
 }

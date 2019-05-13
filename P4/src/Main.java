@@ -11,10 +11,12 @@ public class Main {
         list.add(4);
         list.add(5);
 
-        System.out.println(list.toString());
-        System.out.println(list.dataAt(1));
-        // System.out.println(list.move(list.dataAt(1), 5));
-        System.out.println(list.moveDown(list.dataAt(1), 4));
-        System.out.println(list.toString());
+        list.BOF();
+        System.out.println(list.dataAt(4));
+        list.BOF();
+        System.out.println(list.moveDown(list.dataAt(0), 5));
+        list.BOF();
+        System.out.println(list.moveUp(list.dataAt(5), 2));
+        list.BOF();
     }
 }
