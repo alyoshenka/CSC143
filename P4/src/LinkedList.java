@@ -207,7 +207,7 @@ public class LinkedList<E> implements java.io.Serializable {
     }
 
     /**
-     * moves an item down the list
+     * moves the first occurrence of an item down the list
      *
      * @param item the item to move
      * @param positions the number of positions to move it
@@ -215,36 +215,52 @@ public class LinkedList<E> implements java.io.Serializable {
      * @return whether moving was successful, ie item found and positions within range
      */
     public boolean moveDown(E item, int positions){
+        // preconditions
         if(positions < 0){
             return false;
         }
         if(0 == positions){
             return true;
         }
+
+        // find item
         boolean found = false;
-        Node active;
-        for(active = head; null != active; active = active.next){
-           if(active.data.equals(item)){
+        Node moving;
+        for(moving = head; null != moving; moving = moving.next){
+           if(moving.data.equals(item)){
+               moving.prev.next = moving.next;
+               moving.next.prev = moving.prev;
                found = true;
                break;
            }
         }
-        if(!found){
+
+        // item not in list or at end of list
+        if(!found || moving == tail){
             return false;
         }
-        Node current = active;
+
+        // iterate to position
+        Node current = moving;
         for(int i = 0; i < positions; i++){
-            current = current.next;
-            if(i + positions > size){
-                found = false;
-                break;
+            // if at tail
+            if(null == current.next){
+                tail.next = moving; // is copy so should have prev but check
+                moving.prev = tail;
+                return false;
             }
+            current = current.next;
         }
-        active.next = current.next;
-        active.prev = current.prev;
-        active.prev.next = active;
-        active.next.prev = active;
-        return found;
+
+        // if at end
+        if(null == current.next){
+            tail = moving;
+        }
+        moving.next = current.next;
+        current.next = moving;
+        moving.prev = current;
+
+        return true;
     }
 
     /**
