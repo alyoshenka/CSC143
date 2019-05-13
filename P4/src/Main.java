@@ -1,7 +1,16 @@
+/**
+ * main application class
+ */
 public class Main {
 
+    /** debug mode enabled */
     public static boolean DEBUG = true;
 
+    /**
+     * main application method
+     *
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         LinkedList<Integer> list = new LinkedList<>();
         list.add(1);

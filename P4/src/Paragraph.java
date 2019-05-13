@@ -73,9 +73,21 @@ public class Paragraph {
         return true;
     }
 
+    /**
+     * sets the paragraph style
+     *
+     * @param newStyle the new paragraph style
+     */
+    public void setStyle(ParaStyle newStyle){
+        style = newStyle;
+    }
 
-    public void setStyle(ParaStyle newStyle){} // just make public instead?
-    public ParaStyle getSyele(){
+    /**
+     * gets the paragraph style
+     *
+     * @return the paragraph style
+     */
+    public ParaStyle getStyle(){
         return style;
     }
 

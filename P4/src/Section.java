@@ -21,12 +21,14 @@ public class Section {
      * @param heading the heading for this Section, default initialized if null
      */
     public Section(String heading, ListManager<Paragraph> paragraphs){
-        this.heading = null == heading ? "" : heading;
+        this.heading = null == heading ? "New Section" : heading;
         this.paragraphs = null == paragraphs ? new ListManager<Paragraph>() : paragraphs;
     }
 
     /**
      * gets the heading
+     *
+     * @return the heading
      */
     public String getHeading(){
         return heading;
