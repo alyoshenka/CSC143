@@ -41,7 +41,7 @@ public class ListManager<E> {
      * @return the item at the index
      */
     public E getItem(int idx){
-        return items.dataAt(idx);
+        return items.itemAt(idx);
     }
 
     /**

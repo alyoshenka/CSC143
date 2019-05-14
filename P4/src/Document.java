@@ -21,6 +21,12 @@ public class Document {
         sections = new ListManager<Section>();
         title = "New Document";
         // instance ?
+
+        // make directory
+        File directory = new File(DIR);
+        if(!directory.exists()){
+            directory.mkdir();
+        }
     }
 
     /**
@@ -28,7 +34,7 @@ public class Document {
      *
      * @return the singleton instance of Document
      */
-    public Document getInstance(){
+    public static Document getInstance(){
         if(null == instance){
             instance = new Document();
         }
@@ -96,7 +102,7 @@ public class Document {
         try {
             FileOutputStream fileOut = new FileOutputStream(DIR + title + EXT);
             ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
-            objOut.writeObject(this);
+            objOut.writeObject(this); // instance?
             objOut.flush();
             objOut.close();
             fileOut.flush();
@@ -114,7 +120,16 @@ public class Document {
      * @return whether the file was saved successfully
      */
     public boolean saveToHTML(){
-        return false;
+        try{
+            FileWriter writer = new FileWriter(new File(DIR + title + ".html"));
+            writer.write(toHTML());
+            writer.flush();
+            writer.close();
+        }
+        catch(IOException e){
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -160,5 +175,29 @@ public class Document {
         newDoc.title = title;
         instance = newDoc;
         return newDoc;
+    }
+
+    /**
+     * gets an HTML string this object
+     *
+     * @return an HTML string this object
+     */
+    public String toHTML(){
+        String s = "<!DOCTYPE html>\n<html>\n";
+        for(int i = 0; i < sections.getCount(); i++){
+            s += sections.getItem(i).toHTML();
+        }
+        s += "</html>\n";
+
+        return s;
+    }
+
+    /**
+     * gets a string representation of this object
+     *
+     * @return the String representation of this object;
+     */
+    public String toString(){
+        return null;
     }
 }

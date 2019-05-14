@@ -66,14 +66,56 @@ public class LinkedListTest
         list.add(3);
         list.add(4);
         list.add(5);
-        assertEquals(0, (int)list.dataAt(0));
-        assertEquals(5, (int)list.dataAt(5));
-        list.addAt(0, -1);
-        list.addAt(-2, list.size());
-        assertEquals(-1, (int)list.dataAt(0));
-        assertEquals(-2, (int)list.dataAt(7));
+        assertEquals(0, (int)list.itemAt(0));
+        assertEquals(5, (int)list.itemAt(5));
+        list.addAt(-1, 0);
+        list.addAt(-2, list.size() - 1);
+        assertEquals(-1, (int)list.itemAt(0));
+        assertEquals(-2, (int)list.itemAt(list.size() - 1));
 
         assertEquals(false, list.addAt(0, -1));
-        assertEquals(false, list.addAt(0, list.size() + 1));
+        assertEquals(false, list.addAt(0, list.size()));
+    }
+
+    /**
+     * tests moveDown
+     */
+    @Test
+    public void moveDownTest(){
+        LinkedList<Integer> list = new LinkedList<>();
+        list.add(0);
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        list.add(5);
+
+        assertTrue(list.moveUp(5, 0));
+        list.moveDown(0, 1);
+        assertEquals(0, (int)list.itemAt(1));
+        list.moveDown(0, 100);
+        assertEquals(0, (int)list.itemAt(list.size() - 1));
+        assertEquals(false, list.moveUp(-1, 1));
+    }
+
+    /**
+     * tests moveUp
+     */
+    @Test
+    public void moveUpTest(){
+        LinkedList<Integer> list = new LinkedList<>();
+        list.add(0);
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        list.add(5);
+
+        assertTrue(list.moveDown(3, 0));
+        list.moveUp(5, 1);
+        assertEquals(5, (int)list.itemAt(4));
+        list.moveUp(0, 100);
+        assertEquals(0, (int)list.itemAt(0));
+        assertEquals(false, list.moveUp(-1, 1));
     }
 }

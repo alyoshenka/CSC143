@@ -12,20 +12,22 @@ public class Main {
      * @param args command line arguments
      */
     public static void main(String[] args) {
-        LinkedList<Integer> list = new LinkedList<>();
-        list.add(1);
-        list.add(0);
-        list.add(2);
-        list.add(3);
-        list.add(4);
-        list.add(5);
+        Document myDoc = Document.getInstance().newDocument("Hippos");
+        Section firstSect = new Section();
+        firstSect.addParagraph(  new Paragraph("Pygmy Hippos of Africa", Paragraph.ParaStyle.Heading_1));
+        firstSect.addParagraph(  new Paragraph("While the hippopotamus exists in various places in Africa..."));
+        firstSect.addParagraph(new Paragraph("Hippo facts:"));
+        String bulletedText = "";
+        bulletedText += "The name Hippopotamus comes from the Ancient Greek 'river horse'. \n";
+        bulletedText += "Hippos secrete an oily red substance; they do not sweat blood. \n";
+        bulletedText += "An adult Hippo resurfaces every 3 to 5 minutes to breathe.\n";
+        bulletedText += "They are only territorial while in the water.";
+        firstSect.addParagraph(  new Paragraph(bulletedText, Paragraph.ParaStyle.List_Bulleted));
+        firstSect.addParagraph(  new Paragraph("I hope you have enjoyed our foray into the world of the pygmy hippo..."));
 
-        list.BOF();
-        System.out.println(list.dataAt(4));
-        list.BOF();
-        System.out.println(list.moveDown(list.dataAt(0), 5));
-        list.BOF();
-        System.out.println(list.moveUp(list.dataAt(5), 2));
-        list.BOF();
+        myDoc.addSection(firstSect);
+        myDoc.save();
+        // System.out.println(myDoc.toHTML());
+        System.out.println(myDoc.saveToHTML());
     }
 }

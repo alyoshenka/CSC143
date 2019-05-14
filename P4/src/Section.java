@@ -47,4 +47,43 @@ public class Section {
         this.heading = heading;
         return true;
     }
+
+    /**
+     * adds a paragraph to the ListManager
+     *
+     * @param para the Paragraph to add
+     * @return whether adding was successful, ie para != null
+     */
+    public boolean addParagraph(Paragraph para){
+        if(null == para){
+            return false;
+        }
+        paragraphs.add(para);
+        return true;
+    }
+
+    /**
+     * gets an HTML string this object
+     *
+     * @return an HTML string this object
+     */
+    public String toHTML(){
+        String s = "<body>\n";
+        for(int i = 0; i < paragraphs.getCount(); i++){
+            s += paragraphs.getItem(i).toHTML();
+            s += "\n";
+        }
+        s += "</body>\n";
+
+        return s;
+    }
+
+    /**
+     * gets a string representation of this object
+     *
+     * @return the String representation of this object;
+     */
+    public String toString(){
+        return null;
+    }
 }

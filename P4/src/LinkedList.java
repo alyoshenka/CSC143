@@ -59,7 +59,7 @@ public class LinkedList<E> implements java.io.Serializable {
      * @param idx the index to get data from
      * @return the data at specified index, null if out of bounds
      */
-    public E dataAt(int idx){ // iterate backwards for efficiency
+    public E itemAt(int idx){ // iterate backwards for efficiency
         if(idx < 0 || idx >= size){
             return null;
         }
@@ -99,35 +99,38 @@ public class LinkedList<E> implements java.io.Serializable {
      * @param item the item to add
      * @param idx the index to add it
      * @return whether the add was successful, ie idx within bounds
+     *      if idx > size, will add item at end and return false
+     *      if idx < 0, will return false and not add item
      */
     public boolean addAt(E item, int idx){
-        if(null == head || idx > size){
+        if(idx < 0){
+            return false;
+        }
+        if(null == head || idx >= size){
             add(item);
             return 0 == idx;
         }
-
-        Node next;
+        Node n = new Node();
+        n.data = item;
         Node current = head;
         for(int i = 0; i < idx; i++){
-            if(null == current.next){
-                break;
+            // if at tail
+            if(null == current){
+                n.prev = tail;
+                tail.next = n;
+                tail = n;
+                return false;
             }
             current = current.next;
         }
-        next = current.next;
-        if(null == next){ // not needed (?)
-            add(item);
-            return false;
-        } else{
-            Node newNode = new Node();
-            newNode.next = next;
-            newNode.prev = current;
-            newNode.data = item;
-            next.prev = newNode;
-            current.next = newNode;
-            size++;
-            return true;
+        n.prev = current.prev;
+        current.prev = n;
+        n.next = current;
+        if(0 == idx){
+            head = n;
         }
+        size++;
+        return true;
     }
 
     /**
@@ -194,7 +197,9 @@ public class LinkedList<E> implements java.io.Serializable {
                }else{
                    moving.prev.next = moving.next;
                }
-               moving.next.prev = moving.prev;
+               if(null != moving.next){                   
+                   moving.next.prev = moving.prev;
+               }
                found = true;
                break;
            }
@@ -260,7 +265,9 @@ public class LinkedList<E> implements java.io.Serializable {
                }else{
                    moving.next.prev = moving.prev;
                }
-               moving.prev.next = moving.next;
+               if(null != moving.prev){
+                   moving.prev.next = moving.next;
+                }
                found = true;
                break;
            }

@@ -8,8 +8,8 @@ public class Paragraph {
         Alignment_Right,
         /** center aligned */
         Alignment_Center,
-        /** bulletted list */
-        List_Bulletted,
+        /** bulleted list */
+        List_Bulleted,
         /** a numbered list */
         List_Numbered,
         /** largest heading */
@@ -31,11 +31,40 @@ public class Paragraph {
     private ParaStyle style;
 
     /**
-     * Paragraph constructor
+     * default Paragraph constructor
      */
     public Paragraph(){
-        content = "";
+        content = "New Paragraph";
         style = defStyle;
+    }
+
+    /**
+     * Paragraph constructor
+     *
+     * @param text the content, default initializes if null
+     * @param style the style
+     */
+    public Paragraph(String text, ParaStyle style){
+        if(null == text){
+            content = "New Paragraph";
+        }else{
+            content = text;
+        }
+        this.style = style;
+    }
+
+    /**
+     * Paragraph constructor
+     * style initialized to default
+     * @param text the content, default initializes if null
+     */
+    public Paragraph(String text){
+        if(null == text){
+            content = "New Paragraph";
+        }else{
+            content = text;
+        }
+        this.style = defStyle;
     }
 
     /**
@@ -89,6 +118,82 @@ public class Paragraph {
      */
     public ParaStyle getStyle(){
         return style;
+    }
+
+    /**
+     * gets an HTML string this object
+     *
+     * @return an HTML string this object
+     */
+    public String toHTML(){
+        String s = "";
+        switch(style){
+            case Alignment_Center:
+                s = "<p style=\"text-align:center\" >";
+                s += content;
+                s += "</p>";
+                break;
+            case Alignment_Left:
+                s = "<p style=\"text-align:left\" >";
+                s += content;
+                s += "</p>";
+                break;
+            case Alignment_Right:
+                s = "<p style=\"text-align:right\" >";
+                s += content;
+                s += "</p>";
+                break;
+            case List_Bulleted:
+                s = "<ul>\n";
+                for(String sub : content.split("\n")){
+                    s += "<li>\n";
+                    s += sub;
+                    s += "\n</li>\n";
+                }
+                s += "</ul>";
+                break;
+            case List_Numbered:
+                s = "<ol>\n";
+                for(String sub : content.split("\n")){
+                    s += "<li>\n";
+                    s += sub;
+                    s += "\n</li>\n";
+                }
+                s += "</ol>";
+                break;
+            case Heading_1:
+                s += "<h1>\n";
+                s += content;
+                s += "</h1>";
+                break;
+            case Heading_2:
+                s += "<h2>\n";
+                s += content;
+                s += "</h2>";
+                break;
+            case Heading_3:
+                s += "<h3>\n";
+                s += content;
+                s += "</h3>";
+                break;
+            case Heading_4:
+                s += "<h4>\n";
+                s += content;
+                s += "</h4>";
+                break;
+            default:
+                break;
+        }
+        return s;
+    }
+
+    /**
+     * gets a string representation of this object
+     *
+     * @return the String representation of this object;
+     */
+    public String toString(){
+        return null;
     }
 
 }
