@@ -54,6 +54,8 @@ public class LinkedListTest
         assertTrue(list.end() != null);
     }
     
+    
+    
     /**
      * tests adding and indexing
      */
@@ -113,12 +115,13 @@ public class LinkedListTest
 
         assertTrue(list.moveDown(3, 0));
         list.moveUp(5, 1);
+        // System.out.println(list.toString());
         assertEquals(5, (int)list.itemAt(4));
         list.moveUp(0, 100);
         assertEquals(0, (int)list.itemAt(0));
         assertEquals(false, list.moveUp(-1, 1));
     }
-    
+     
     /**
      * tests invalid inputs
      */

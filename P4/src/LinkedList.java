@@ -216,28 +216,24 @@ public class LinkedList<E> implements java.io.Serializable {
         // iterate to position
         Node current = moving;
         for(int i = 0; i < positions; i++){
-            // if at tail
-            if(null == current.next){
-                tail.next = moving; // is copy so should have prev but check
-                moving.prev = tail;
-                moving.next = null;
-                tail = moving;
-                return false;
+            if(null == current.next){ // if moving past end
+                found = false;
+                break;
             }
             current = current.next;
         }
 
         moving.next = current.next;
         // if at end
-        if(null == current.next){
-            tail = moving;
+        if(!found){
+            tail = current;
         }else{
             moving.next.prev = moving;
         }
         current.next = moving;
         moving.prev = current;
 
-        return true;
+        return found;
     }
 
     /**
@@ -284,25 +280,22 @@ public class LinkedList<E> implements java.io.Serializable {
         // iterate to position
         Node current = moving;
         for(int i = 0; i < positions; i++){
-            // if at head
             if(null == current.prev){
-                head.prev = moving; // is copy so should have next but check
-                moving.next = head;
-                moving.prev = null;
-                head = moving;
-                return false;
+                found = false;
+                break;
             }
             current = current.prev;
         }
 
+        moving.prev = current.prev;
         // if at beginning
-        if(null == current.prev){
+        if(!found){
             head = moving;
         }else{
             moving.prev.next = moving;
         }
-        moving.next = current;
-        current.prev = moving;
+        moving.prev = current;
+        current.next = moving;
 
         return true;
     }
