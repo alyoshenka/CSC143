@@ -1,6 +1,7 @@
+import java.io.Serializable;
 
 /** manages parts of word processing documents */
-public class ListManager<E> {
+public class ListManager<E> implements Serializable {
     /** the list of data */
     private LinkedList<E> items;
 
@@ -72,6 +73,28 @@ public class ListManager<E> {
      */
     public boolean remove(E item){
         return items.remove(item);
+    }
+
+    /**
+     * moves a paragraph up
+     *
+     * @param item the E to move
+     * @param positions the number of positions
+     * @return whether moving was successful
+     */
+    public boolean moveUp(E item, int positions){
+        return items.moveUp(item, positions);
+    }
+
+    /**
+     * moves a paragraph down
+     *
+     * @param item the E to move
+     * @param positions the number of positions
+     * @return whether moving was successful
+     */
+    public boolean moveDown(E item, int positions){
+        return items.moveDown(item, positions);
     }
 
     /**

@@ -9,7 +9,7 @@ public class LinkedList<E> implements java.io.Serializable {
     private int size;
 
     /** a list node */
-    private class Node{
+    private class Node implements java.io.Serializable {
         /** the next Node in the list */
         public Node prev;
         /** the previous Node in the list */
@@ -111,17 +111,19 @@ public class LinkedList<E> implements java.io.Serializable {
             add(item);
             return 0 == idx;
         }
+        
         Node n = new Node();
         n.data = item;
+        if(idx == size - 1){
+            n.prev = tail;
+            tail.next = n;
+            tail = n;
+            size++;
+            return true;
+        }
+        
         Node current = head;
         for(int i = 0; i < idx; i++){
-            // if at tail
-            if(null == current){
-                n.prev = tail;
-                tail.next = n;
-                tail = n;
-                return false;
-            }
             current = current.next;
         }
         n.prev = current.prev;
@@ -296,9 +298,9 @@ public class LinkedList<E> implements java.io.Serializable {
         // if at beginning
         if(null == current.prev){
             head = moving;
+        }else{
+            moving.prev.next = moving;
         }
-        moving.prev = current.prev;
-        moving.prev.next = moving;
         moving.next = current;
         current.prev = moving;
 

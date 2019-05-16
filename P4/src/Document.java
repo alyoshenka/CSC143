@@ -1,7 +1,7 @@
 import java.io.*;
 
 /** a word processing document */
-public class Document {
+public class Document implements Serializable {
     /** the singleton instance of Document */
     private static Document instance = null;
     /** the file extension */
@@ -20,7 +20,7 @@ public class Document {
     private Document(){
         sections = new ListManager<Section>();
         title = "New Document";
-        instance = this; // no open doc at init
+        instance = null; // no open doc at init
         File directory = new File(DIR);
         if(!directory.exists()){
             directory.mkdir();
@@ -33,7 +33,7 @@ public class Document {
      * @return the singleton instance of Document
      */
     public static Document getInstance(){
-        return null == instance ? null : instance;
+        return null == instance ? new Document() : instance;
     }
 
     /**
@@ -42,7 +42,10 @@ public class Document {
      * @return the Document title
      */
     public String getTitle(){
-        return title;
+        if(null == instance){
+            return "";
+        }
+        return instance.title;
     }
 
     /**
@@ -55,7 +58,7 @@ public class Document {
         if(null == newTitle){
             return false;
         }
-        title = newTitle;
+        instance.title = newTitle;
         return true;
     }
 
@@ -69,7 +72,7 @@ public class Document {
         if(null == newSection) {
             return false;
         }
-        sections.add(newSection);
+        instance.sections.add(newSection);
         return true;
     }
 
@@ -84,7 +87,19 @@ public class Document {
         if(null == newSection) {
             return false;
         }
-        return sections.addAt(newSection, idx);
+        return instance.sections.addAt(newSection, idx);
+    }
+
+    /**
+     * gets the number of sections
+     *
+     * @return the number of sections
+     */
+    public int size(){
+        if(null == instance){
+            return -1;
+        }
+        return instance.sections.size();
     }
 
     /**
@@ -98,9 +113,9 @@ public class Document {
             throw new IllegalStateException("No open document to save");
         }
         try {
-            FileOutputStream fileOut = new FileOutputStream(DIR + title + EXT);
+            FileOutputStream fileOut = new FileOutputStream(DIR + instance.title + EXT);
             ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
-            objOut.writeObject(this); // instance?
+            objOut.writeObject(instance);
             objOut.flush();
             objOut.close();
             fileOut.flush();
@@ -123,8 +138,8 @@ public class Document {
             throw new IllegalStateException("No open document to save");
         }
         try{
-            FileWriter writer = new FileWriter(new File(DIR + title + ".html"));
-            writer.write(toHTML());
+            FileWriter writer = new FileWriter(new File(DIR + instance.title + ".html"));
+            writer.write(instance.toHTML());
             writer.flush();
             writer.close();
         }
@@ -138,15 +153,16 @@ public class Document {
      * opens a file
      *      does nothing if another file is open
      *
-     * @param file the File to open
+     * @param title the title of the document to open
      * @return whether file was opened successfully
      */
-    public boolean open(File file){
+    public boolean open(String title){
+        title = "Documents/" + title + ".wpd";
         if(null != instance){
             return false;
         }
         try{
-            FileInputStream fileIn = new FileInputStream(file);
+            FileInputStream fileIn = new FileInputStream(title);
             ObjectInputStream objIn = new ObjectInputStream(fileIn);
             instance = (Document)objIn.readObject();
             objIn.close();
@@ -190,10 +206,10 @@ public class Document {
      */
     private String toHTML(){
         String s = "<!DOCTYPE html>\n<html>\n";
-        for(int i = 0; i < sections.size(); i++){
-            s += sections.getItem(i).toHTML("\t");
+        for(int i = 0; i < instance.sections.size(); i++){
+            s += instance.sections.getItem(i).toHTML("\t");
         }
-        s += "</html>\n";
+        s += "\n</html>";
 
         return s;
     }

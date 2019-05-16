@@ -1,5 +1,7 @@
+import java.io.Serializable;
+
 /** a paragraph */
-public class Paragraph {
+public class Paragraph implements Serializable {
     /** Paragraph styles */
     public enum ParaStyle{
         /** left aligned */
@@ -128,61 +130,62 @@ public class Paragraph {
      */
     public String toHTML(String tabs){
         String s = "";
+        tabs = "\n" + tabs;
         String tabs2 = tabs + "\t";
         String tabs3 = tabs2 + "\t";
         switch(style){
             case Alignment_Center:
-                s = tabs + "<p style=\"text-align:center\" >\n";
+                s = tabs + "<p style=\"text-align:center\" >";
                 s += tabs2 + content;
-                s += "\n" + tabs + "</p>";
+                s += tabs + "</p>";
                 break;
             case Alignment_Left:
-                s = tabs + "<p style=\"text-align:left\" >\n";
+                s = tabs + "<p style=\"text-align:left\" >";
                 s += tabs2 + content;
-                s += "\n" + tabs + "</p>";
+                s += tabs + "</p>";
                 break;
             case Alignment_Right:
-                s = tabs + "<p style=\"text-align:right\" >\n";
+                s = tabs + "<p style=\"text-align:right\" >";
                 s += tabs2 + content;
-                s += "\n" + tabs + "</p>";
+                s += tabs + "</p>";
                 break;
             case List_Bulleted:
-                s = tabs + "<ul>\n";
+                s = tabs + "<ul>";
                 for(String sub : content.split("\n")){
-                    s += tabs2 + "<li>\n";
+                    s += tabs2 + "<li>";
                     s += tabs3 + sub;
-                    s += "\n" + tabs2 + "</li>\n";
+                    s += tabs2 + "</li>";
                 }
                 s += tabs + "</ul>";
                 break;
             case List_Numbered:
-                s = tabs + "<ol>\n";
+                s = tabs + "<ol>";
                 for(String sub : content.split("\n")){
-                    s += tabs2 + "<li>\n";
+                    s += tabs2 + "<li>";
                     s += tabs3 + sub;
-                    s += "\n" + tabs2 + "</li>\n";
+                    s += tabs2 + "</li>";
                 }
                 s += tabs + "</ol>";
                 break;
             case Heading_1:
-                s += tabs + "<h1>\n";
+                s += tabs + "<h1>";
                 s += tabs2 + content;
-                s += "\n" + tabs + "</h1>";
+                s += tabs + "</h1>";
                 break;
             case Heading_2:
-                s += tabs + "<h2>\n";
+                s += tabs + "<h2>";
                 s += tabs2 + content;
-                s += "\n" + tabs + "</h2>";
+                s += tabs + "</h2>";
                 break;
             case Heading_3:
-                s += tabs + "<h3>\n";
+                s += tabs + "<h3>";
                 s += tabs2 + content;
-                s += "\n" + tabs + "</h3>";
+                s += tabs + "</h3>";
                 break;
             case Heading_4:
-                s += tabs + "<h4>\n";
+                s += tabs + "<h4>";
                 s += tabs2 + content;
-                s += "\n" + tabs + "</h4>";
+                s += tabs + "</h4>";
                 break;
             default:
                 break;

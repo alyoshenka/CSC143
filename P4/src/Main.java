@@ -32,10 +32,13 @@ public class Main {
         myDoc.close();
 
         Document mySecDoc = Document.getInstance();
-        mySecDoc.open(new java.io.File("Documents/" + fileName + ".wpd"));
-        mySecDoc.setTitle("My second document");
+        mySecDoc.open(fileName);
+        mySecDoc.setTitle("MySecondDocument");
         Section sec = new Section();
-        sec.addParagraph(new Paragraph("Hippos are super cool!"));
+        sec.addParagraph(new Paragraph("Hippos are super cool!", Paragraph.ParaStyle.Alignment_Right));
+        Paragraph p = new Paragraph("This paragraph will be in the middle", Paragraph.ParaStyle.Alignment_Center);
+        sec.addParagraph(p);
+        sec.moveUp(p, 1);
         mySecDoc.addSection(sec);
         mySecDoc.save();
         mySecDoc.saveToHTML();

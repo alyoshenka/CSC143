@@ -71,7 +71,7 @@ public class LinkedListTest
         list.addAt(-1, 0);
         list.addAt(-2, list.size() - 1);
         assertEquals(-1, (int)list.itemAt(0));
-        assertEquals(-2, (int)list.itemAt(list.size() - 1));
+        assertEquals(-2, (int)list.itemAt(list.size() - 1)); //
 
         assertEquals(false, list.addAt(0, -1));
         assertEquals(false, list.addAt(0, list.size()));

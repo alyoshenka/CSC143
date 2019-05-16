@@ -1,6 +1,7 @@
+import java.io.Serializable;
 
 /** a word processing document section */
-public class Section {
+public class Section implements Serializable {
     /** paragraphs in this section */
     private ListManager<Paragraph> paragraphs;
     /** heading of this section */
@@ -72,19 +73,40 @@ public class Section {
     }
 
     /**
+     * moves a paragraph up
+     *
+     * @param para the paragraph to move
+     * @param positions the number of positions
+     * @return whether moving was successful
+     */
+    public boolean moveUp(Paragraph para, int positions){
+        return paragraphs.moveUp(para, positions);
+    }
+
+    /**
+     * moves a paragraph down
+     *
+     * @param para the paragraph to move
+     * @param positions the number of positions
+     * @return whether moving was successful
+     */
+    public boolean moveDown(Paragraph para, int positions){
+        return paragraphs.moveDown(para, positions);
+    }
+
+    /**
      * gets an HTML string this object
      *
      * @param tabs the string to add to apply tabs
      * @return an HTML string this object
      */
     public String toHTML(String tabs){
-        String s = tabs + "<body>\n";
-        s += "\n" + tabs + "<hr/>\n";
-        tabs += "\t";
+        String s = tabs + "<body>";
+        s += "\n" + tabs + "<hr/>";
         for(int i = 0; i < paragraphs.size(); i++){
-            s += paragraphs.getItem(i).toHTML(tabs);
+            s += paragraphs.getItem(i).toHTML("\t" + tabs);
         }
-        s += tabs + "</body>\n";
+        s += "\n" + tabs + "</body>";
 
         return s;
     }

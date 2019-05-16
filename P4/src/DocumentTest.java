@@ -50,11 +50,11 @@ public class DocumentTest
     @Test
     public void testInstance(){
         Document d = Document.getInstance();
-        assertEquals(null, d);
+        assertEquals(-1, Document.getInstance().size());
         d = Document.newDocument("d");
-        assertTrue(null != d);
+        assertEquals(0, Document.getInstance().size());
         d.close();
-        assertEquals(null, Document.getInstance());
+        assertEquals(-1, Document.getInstance().size());
     }
     
     /**
@@ -94,7 +94,7 @@ public class DocumentTest
     public void badOpen(){
         Document d = Document.getInstance();
         d = Document.newDocument("d");
-        assertEquals(false, d.open(new java.io.File("f")));
+        assertEquals(false, d.open("f"));
     }
     
     /**
@@ -105,6 +105,6 @@ public class DocumentTest
         Document d = Document.getInstance();
         d = Document.newDocument("d");
         d.close();
-        assertEquals(false, d.open(new java.io.File("notAPath")));
+        assertEquals(false, d.open("notAPath"));
     }
 }
