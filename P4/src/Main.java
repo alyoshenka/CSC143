@@ -27,7 +27,5 @@ public class Main {
 
         myDoc.addSection(firstSect);
         myDoc.save();
-        // System.out.println(myDoc.toHTML());
-        System.out.println(myDoc.saveToHTML());
     }
 }

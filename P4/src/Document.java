@@ -20,9 +20,7 @@ public class Document {
     private Document(){
         sections = new ListManager<Section>();
         title = "New Document";
-        // instance ?
-
-        // make directory
+        instance = this; // no open doc at init
         File directory = new File(DIR);
         if(!directory.exists()){
             directory.mkdir();
@@ -35,10 +33,7 @@ public class Document {
      * @return the singleton instance of Document
      */
     public static Document getInstance(){
-        if(null == instance){
-            instance = new Document();
-        }
-        return instance;
+        return null == instance ? new Document() : instance;
     }
 
     /**
@@ -96,9 +91,12 @@ public class Document {
      * saves the file
      *
      * @return whether save was successful
+     * @throws IllegalStateException if no open document
      */
     public boolean save(){
-        instance.close();
+        if(null == instance){
+            throw new IllegalStateException("No open document to save");
+        }
         try {
             FileOutputStream fileOut = new FileOutputStream(DIR + title + EXT);
             ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
@@ -118,8 +116,12 @@ public class Document {
      * saves the file to HTML
      *
      * @return whether the file was saved successfully
+     * @throws IllegalStateException if no open document
      */
     public boolean saveToHTML(){
+        if(null == instance){
+            throw new IllegalStateException("No open document to save");
+        }
         try{
             FileWriter writer = new FileWriter(new File(DIR + title + ".html"));
             writer.write(toHTML());
@@ -134,14 +136,14 @@ public class Document {
 
     /**
      * opens a file
+     *      does nothing if another file is open
      *
      * @param file the File to open
      * @return whether file was opened successfully
      */
     public boolean open(File file){
         if(null != instance){
-            instance.save();
-            instance.close();
+            return false;
         }
         try{
             FileInputStream fileIn = new FileInputStream(file);
@@ -158,19 +160,19 @@ public class Document {
 
     /**
      * closes the current file
+     *      Note: DOES NOT SAVE
      */
     public void close(){
         instance = null;
     }
 
     /**
-     * makes a new Document
+     * makes a new Document, overwriting current document if not closed
      *
      * @param title the title of the new Document
      * @return the new Document
      */
     public Document newDocument(String title){
-        instance.close();
         Document newDoc = new Document();
         newDoc.title = title;
         instance = newDoc;
@@ -182,10 +184,10 @@ public class Document {
      *
      * @return an HTML string this object
      */
-    public String toHTML(){
+    private String toHTML(){
         String s = "<!DOCTYPE html>\n<html>\n";
         for(int i = 0; i < sections.getCount(); i++){
-            s += sections.getItem(i).toHTML();
+            s += sections.getItem(i).toHTML("\t");
         }
         s += "</html>\n";
 
@@ -198,6 +200,6 @@ public class Document {
      * @return the String representation of this object;
      */
     public String toString(){
-        return null;
+        return "Document: " + title + " Sections: " + sections.toString();
     }
 }

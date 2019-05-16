@@ -73,4 +73,13 @@ public class ListManager<E> {
     public boolean remove(E item){
         return items.remove(item);
     }
+
+    /**
+     * gets a string representation of this object
+     *
+     * @return a string representation of this object
+     */
+    public String toString(){
+        return "Items: " + items.toString();
+    }
 }

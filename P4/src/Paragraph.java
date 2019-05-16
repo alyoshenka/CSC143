@@ -125,61 +125,63 @@ public class Paragraph {
      *
      * @return an HTML string this object
      */
-    public String toHTML(){
+    public String toHTML(String tabs){
         String s = "";
+        String tabs2 = tabs + "\t";
+        String tabs3 = tabs2 + "\t";
         switch(style){
             case Alignment_Center:
-                s = "<p style=\"text-align:center\" >";
-                s += content;
-                s += "</p>";
+                s = tabs + "<p style=\"text-align:center\" >\n";
+                s += tabs2 + content;
+                s += "\n" + tabs + "</p>";
                 break;
             case Alignment_Left:
-                s = "<p style=\"text-align:left\" >";
-                s += content;
-                s += "</p>";
+                s = tabs + "<p style=\"text-align:left\" >\n";
+                s += tabs2 + content;
+                s += "\n" + tabs + "</p>";
                 break;
             case Alignment_Right:
-                s = "<p style=\"text-align:right\" >";
-                s += content;
-                s += "</p>";
+                s = tabs + "<p style=\"text-align:right\" >\n";
+                s += tabs2 + content;
+                s += "\n" + tabs + "</p>";
                 break;
             case List_Bulleted:
-                s = "<ul>\n";
+                s = tabs + "<ul>\n";
                 for(String sub : content.split("\n")){
-                    s += "<li>\n";
-                    s += sub;
-                    s += "\n</li>\n";
+                    s += tabs2 + "<li>\n";
+                    s += tabs3 + sub;
+                    s += "\n" + tabs2 + "</li>\n";
                 }
-                s += "</ul>";
+                s += tabs + "</ul>";
                 break;
             case List_Numbered:
-                s = "<ol>\n";
+                s = tabs + "<ol>\n";
                 for(String sub : content.split("\n")){
-                    s += "<li>\n";
-                    s += sub;
-                    s += "\n</li>\n";
+                    s += tabs2 + "<li>\n";
+                    s += tabs3 + sub;
+                    s += "\n" + tabs2 + "</li>\n";
                 }
-                s += "</ol>";
+                s += tabs + "</ol>";
                 break;
             case Heading_1:
-                s += "<h1>\n";
-                s += content;
-                s += "</h1>";
+                s += tabs + "<h1>\n";
+                s += tabs2 + content;
+                s += "\n" + tabs + "</h1>";
                 break;
             case Heading_2:
-                s += "<h2>\n";
-                s += content;
-                s += "</h2>";
+                s += tabs + "<h2>\n";
+                s += tabs2 + content;
+                s += "\n" + tabs + "</h2>";
                 break;
             case Heading_3:
-                s += "<h3>\n";
-                s += content;
-                s += "</h3>";
+                s += tabs + "<h3>\n";
+                s += tabs2 + content;
+                s += "\n" + tabs + "</h3>";
                 break;
             case Heading_4:
-                s += "<h4>\n";
-                s += content;
-                s += "</h4>";
+                s += tabs + "<h4>\n";
+                s += tabs2 + content;
+                s += "\n" + tabs + "</h4>";
                 break;
             default:
                 break;
@@ -193,7 +195,7 @@ public class Paragraph {
      * @return the String representation of this object;
      */
     public String toString(){
-        return null;
+        return style.toString() + " - " + content;
     }
 
 }

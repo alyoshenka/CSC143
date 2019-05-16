@@ -312,7 +312,7 @@ public class LinkedList<E> implements java.io.Serializable {
     public String toString(){
         String s = "Size: " + size + " Data:";
         for(Node n = head; null != n; n = n.next){
-            s += " " + n.data;
+            s += "\n" + n.data;
         }
         return s;
     }

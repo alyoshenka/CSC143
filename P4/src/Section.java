@@ -67,13 +67,14 @@ public class Section {
      *
      * @return an HTML string this object
      */
-    public String toHTML(){
-        String s = "<body>\n";
+    public String toHTML(String tabs){
+        String s = tabs + "<body>\n";
+        tabs += "\t";
         for(int i = 0; i < paragraphs.getCount(); i++){
-            s += paragraphs.getItem(i).toHTML();
-            s += "\n";
+            s += paragraphs.getItem(i).toHTML(tabs);
+            s += "\n" + tabs + "<hr/>\n";
         }
-        s += "</body>\n";
+        s += tabs + "</body>\n";
 
         return s;
     }
@@ -84,6 +85,6 @@ public class Section {
      * @return the String representation of this object;
      */
     public String toString(){
-        return null;
+        return "Heading: " + heading + "Paragraphs: " + paragraphs.toString();
     }
 }
