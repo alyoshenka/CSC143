@@ -123,6 +123,7 @@ public class Paragraph {
     /**
      * gets an HTML string this object
      *
+     * @param tabs the string to add to apply tabs
      * @return an HTML string this object
      */
     public String toHTML(String tabs){

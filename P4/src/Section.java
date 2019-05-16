@@ -26,6 +26,15 @@ public class Section {
     }
 
     /**
+     * gets the number of sections
+     * 
+     * @return the number of sections
+     */
+    public int size(){
+        return paragraphs.size();
+    }
+    
+    /**
      * gets the heading
      *
      * @return the heading
@@ -65,14 +74,15 @@ public class Section {
     /**
      * gets an HTML string this object
      *
+     * @param tabs the string to add to apply tabs
      * @return an HTML string this object
      */
     public String toHTML(String tabs){
         String s = tabs + "<body>\n";
+        s += "\n" + tabs + "<hr/>\n";
         tabs += "\t";
-        for(int i = 0; i < paragraphs.getCount(); i++){
+        for(int i = 0; i < paragraphs.size(); i++){
             s += paragraphs.getItem(i).toHTML(tabs);
-            s += "\n" + tabs + "<hr/>\n";
         }
         s += tabs + "</body>\n";
 

@@ -118,4 +118,16 @@ public class LinkedListTest
         assertEquals(0, (int)list.itemAt(0));
         assertEquals(false, list.moveUp(-1, 1));
     }
+    
+    /**
+     * tests invalid inputs
+     */
+    @Test
+    public void preconds(){
+        LinkedList<Integer> list = new LinkedList<>();
+        list.addAt(1, -1);
+        list.add(1);
+        assertEquals(null, list.itemAt(-1));
+        assertEquals(false, list.remove(2));
+    }
 }

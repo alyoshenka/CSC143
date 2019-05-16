@@ -3,7 +3,7 @@ import java.io.*;
 /** a word processing document */
 public class Document {
     /** the singleton instance of Document */
-    private static Document instance;
+    private static Document instance = null;
     /** the file extension */
     private static final String EXT = ".wpd";
     /** the local directory where documents are stored */
@@ -33,7 +33,7 @@ public class Document {
      * @return the singleton instance of Document
      */
     public static Document getInstance(){
-        return null == instance ? new Document() : instance;
+        return null == instance ? null : instance;
     }
 
     /**
@@ -167,12 +167,16 @@ public class Document {
     }
 
     /**
-     * makes a new Document, overwriting current document if not closed
+     * makes a new Document
      *
      * @param title the title of the new Document
      * @return the new Document
+     * @throw IllegalStateException if another doc is open
      */
-    public Document newDocument(String title){
+    public static Document newDocument(String title){
+        if(null != instance){
+            throw new IllegalStateException("another document is open");
+        }
         Document newDoc = new Document();
         newDoc.title = title;
         instance = newDoc;
@@ -186,7 +190,7 @@ public class Document {
      */
     private String toHTML(){
         String s = "<!DOCTYPE html>\n<html>\n";
-        for(int i = 0; i < sections.getCount(); i++){
+        for(int i = 0; i < sections.size(); i++){
             s += sections.getItem(i).toHTML("\t");
         }
         s += "</html>\n";

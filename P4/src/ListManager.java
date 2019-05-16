@@ -30,7 +30,7 @@ public class ListManager<E> {
      *
      * @return the number of items in the list
      */
-    public int getCount(){
+    public int size(){
         return items.size();
     }
 

@@ -25,7 +25,20 @@ public class Main {
         firstSect.addParagraph(  new Paragraph(bulletedText, Paragraph.ParaStyle.List_Bulleted));
         firstSect.addParagraph(  new Paragraph("I hope you have enjoyed our foray into the world of the pygmy hippo..."));
 
+        String fileName = myDoc.getTitle();
         myDoc.addSection(firstSect);
         myDoc.save();
+        myDoc.saveToHTML();
+        myDoc.close();
+
+        Document mySecDoc = Document.getInstance();
+        mySecDoc.open(new java.io.File("Documents/" + fileName + ".wpd"));
+        mySecDoc.setTitle("My second document");
+        Section sec = new Section();
+        sec.addParagraph(new Paragraph("Hippos are super cool!"));
+        mySecDoc.addSection(sec);
+        mySecDoc.save();
+        mySecDoc.saveToHTML();
+        mySecDoc.close();
     }
 }

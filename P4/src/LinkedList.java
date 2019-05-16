@@ -1,3 +1,4 @@
+
 /** a linked list with objects of type E */
 public class LinkedList<E> implements java.io.Serializable {
     /** the start of the list */
@@ -59,11 +60,11 @@ public class LinkedList<E> implements java.io.Serializable {
      * @param idx the index to get data from
      * @return the data at specified index, null if out of bounds
      */
-    public E itemAt(int idx){ // iterate backwards for efficiency
+    public E itemAt(int idx){
         if(idx < 0 || idx >= size){
             return null;
         }
-
+        
         // iterate through list
         Node current = head;
         for(int i = 0; i < idx; i++){
@@ -99,8 +100,8 @@ public class LinkedList<E> implements java.io.Serializable {
      * @param item the item to add
      * @param idx the index to add it
      * @return whether the add was successful, ie idx within bounds
-     *      if idx > size, will add item at end and return false
-     *      if idx < 0, will return false and not add item
+     *      if idx greater than size, will add item at end and return false
+     *      if idx less than 0, will return false and not add item
      */
     public boolean addAt(E item, int idx){
         if(idx < 0){
@@ -315,26 +316,5 @@ public class LinkedList<E> implements java.io.Serializable {
             s += "\n" + n.data;
         }
         return s;
-    }
-
-    public void forward(){
-        for(Node n = head; null != n; n = n.next){
-            System.out.print(n.data + " ");
-        }
-        System.out.println();
-    }
-
-    public void backward(){
-        for(Node n = tail; null != n; n = n.prev){
-            System.out.print(n.data + " ");
-        }
-        System.out.println();
-    }
-
-    public void BOF(){
-        System.out.println();
-        forward();
-        backward();
-        System.out.println();
     }
 }
