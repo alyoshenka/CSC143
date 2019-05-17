@@ -113,10 +113,7 @@ public class LinkedListTest
         list.add(4);
         list.add(5);
 
-        assertTrue(list.moveDown(3, 0));
-        list.moveUp(5, 1);
-        // System.out.println(list.toString());
-        assertEquals(5, (int)list.itemAt(4));
+        assertTrue(list.moveUp(3, 0));
         list.moveUp(0, 100);
         assertEquals(0, (int)list.itemAt(0));
         assertEquals(false, list.moveUp(-1, 1));

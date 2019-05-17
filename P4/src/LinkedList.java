@@ -251,8 +251,8 @@ public class LinkedList<E> implements java.io.Serializable {
         }
         if(0 == positions){
             return true;
-        }
-
+        }        
+        
         // find item
         boolean found = false;
         Node moving;
@@ -270,7 +270,7 @@ public class LinkedList<E> implements java.io.Serializable {
                found = true;
                break;
            }
-        }
+        }  
 
         // item not in list or at beginning of list
         if(!found || moving == head){
@@ -287,17 +287,21 @@ public class LinkedList<E> implements java.io.Serializable {
             current = current.prev;
         }
 
-        moving.prev = current.prev;
         // if at beginning
-        if(!found){
+        if(current == head){
+            moving.next = head;
+            head.prev = moving;
+            moving = head;
+        }else if(!found){
             head = moving;
         }else{
             moving.prev.next = moving;
         }
-        moving.prev = current;
-        current.next = moving;
+        
+        moving.next = current;
+        current.prev = moving;
 
-        return true;
+        return found;
     }
 
     /**
