@@ -1,12 +1,52 @@
+import java.io.*;
+import java.nio.Buffer;
+
 public class WearableManager {
     /** all the wearables */
     private Wearable[] wearables;
     /** wearables by customer ranking */
     private BinarySearch<Integer> rankings;
     /** wearables by price */
-    private BinarySearchDuplicate<String> prices;
+    private BinarySearchDuplicate<Double> prices;
     /** wearables by company name */
     private BinarySearchDuplicate<String> coNames;
+
+    /**
+     * default constructor
+     */
+    public WearableManager(){
+        try{
+            BufferedReader br = new BufferedReader(new FileReader("Wearables.txt"));
+            int size = Integer.parseInt(br.readLine());
+            wearables = new Wearable[size];
+            int idx = 0;
+            /** take off csv label line */
+            String line = br.readLine();
+            /** add to array */
+            while(null != (line = br.readLine())){
+                String[] sections = line.split("@");
+                if(sections.length != 11){
+                    // break
+                }
+                Wearable wear = new Wearable(Integer.parseInt(sections[0]), sections[1],
+                    Double.parseDouble(sections[2]), sections[3], sections[4], sections[5], sections[6],
+                    sections[7], sections[8], sections[9], sections[10]);
+                wearables[idx++] = wear;
+            }
+            br.close();
+        } catch(Exception e){
+            // deal with error
+        }
+
+        rankings = new BinarySearch<>();
+        prices = new BinarySearchDuplicate<>();
+        coNames = new BinarySearchDuplicate<>();
+        for(int i = 0; i < wearables.length; i++){
+            rankings.add(wearables[i].getRanking(), i);
+            prices.add(wearables[i].getPrice(), i);
+            coNames.add(wearables[i].getCompanyName(), i);
+        }
+    }
 
     /**
      * gets the wearable at the given index
@@ -14,7 +54,7 @@ public class WearableManager {
      * @param idx index to get from
      * @return indexed wearable, null if invalid index
      */
-    public Wearable getWearaleAtIndex(int idx){
+    public Wearable getWearableAtIndex(int idx){
         if(idx < 0 || idx >= wearables.length){
             return null;
         }
@@ -27,7 +67,7 @@ public class WearableManager {
      * @return wearables in ranked order
      */
     public int[] getRankingPositionData(){
-        return null;
+        return rankings.inOrder();
     }
 
     /**
@@ -36,7 +76,7 @@ public class WearableManager {
      * @return the wearables in order by price
      */
     public int[] getPricePositionData(){
-        return null;
+        return prices.inOrder();
     }
 
     /**
@@ -45,7 +85,7 @@ public class WearableManager {
      * @return the wearables in order by company name
      */
     public int[] getCoNamePositionData(){
-        return null;
+        return coNames.inOrder();
     }
 
     /**

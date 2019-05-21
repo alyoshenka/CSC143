@@ -1,4 +1,6 @@
 public class Wearable {
+    /** the device ranking */
+    private int ranking;
     /** the device name */
     private String name;
     /** the device price */
@@ -34,21 +36,32 @@ public class Wearable {
      * @param companyState company state
      * @param companyCountry company country
      */
-    public Wearable(String name, double price, String category, String bodyLocation,
+    public Wearable(int ranking, String name, double price, String bodyLocation, String category,
         String companyName, String companyURL, String companyMappingLocation,
         String companyCity, String companyState, String companyCountry){
 
-        System.out.println("preconds");
+        // deal with preconditions
 
+        this.ranking = ranking;
         this.name = name;
         this.price = price;
         this.bodyLocation = bodyLocation;
         this.category = category;
         this.companyName = companyName;
+        this.companyURL = companyURL;
         this.companyMappingLocation = companyMappingLocation;
         this.companyCity = companyCity;
         this.companyState = companyState;
         this.companyCountry = companyCountry;
+    }
+
+    /**
+     * gets the device ranking
+     *
+     * @return the device ranking;
+     */
+    public int getRanking(){
+        return ranking;
     }
 
     /**

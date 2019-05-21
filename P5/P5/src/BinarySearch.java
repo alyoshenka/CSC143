@@ -1,13 +1,26 @@
-public class BinarySearch<E> {
+public class BinarySearch<E extends Comparable<E>> {
 
     private Node<E> overallRoot;
     private int size;
 
-    public class Node<E>{
+    private static class Node<E>{
+        /** data this node holds */
         public E data;
+        /** array position of the data */
         public int arrayPosition;
+        /** the node to the left */
         public Node<E> left;
-        public Node<E> rigth;
+        /** the node to the right */
+        public Node<E> right;
+
+        /**
+         * default node constructor
+         */
+        public Node(){
+            left = right = null;
+            data = null;
+            arrayPosition = -1;
+        }
     }
 
     /**
@@ -21,21 +34,49 @@ public class BinarySearch<E> {
     /**
      * adds an item to the tree
      *
-     * @param item the item to add, must not be duplicate
+     * @param item the item to add, must not be null
+     * @param arrPos the array position of the item
      * @return whether item was added successfully
      */
-    public boolean add(E item){
-        return false;
+    public boolean add(E item, int arrPos){
+        if(null == item){
+            return false;
+        }
+        if(null == overallRoot){
+            overallRoot = new Node<>();
+            overallRoot.data = item;
+        } else{
+            add(item, arrPos, overallRoot);
+        }
+        size++;
+        return true;
     }
 
     /**
      * adds an item to the tree at a given node
      *
-     * @param item the item to ass
+     * @param item the item to add
      * @param root the node to add it at
+     * @return the node modified
      */
-    private void add(E item, Node root){
-
+    private Node add(E item, int arrPos, Node<E> root){
+        if(null == root){
+            root = new Node<E>();
+            root.data = item;
+            root.arrayPosition = arrPos;
+            size++;
+        } else {
+            /** compare value */
+            int val = item.compareTo(root.data);
+            if (val < 0){
+                root.left = add(item, arrPos, root.left);
+            } else if (val > 0){
+                root.right = add(item, arrPos, root.right);
+            } else{
+                // duplicate value
+            }
+        }
+        return root;
     }
 
     /**
@@ -44,7 +85,8 @@ public class BinarySearch<E> {
      * @return an in-order array of the items
      */
     public int[] inOrder(){
-        return null;
+        int[] toReturn = new int[size];
+        return inOrder(overallRoot, toReturn);
     }
 
     /**
@@ -52,7 +94,16 @@ public class BinarySearch<E> {
      *
      * @param root the node to start at
      */
-    private int[] inOrder(Node root){
-        return null;
+    private int[] inOrder(Node root, int[] arr){
+        if(null != root){
+            arr = inOrder(root.left, arr);
+            int idx;
+            for(idx = 0; arr[idx] != 0; idx++){
+                // iterate to next spot
+            }
+            arr[idx] = root.arrayPosition;
+            arr = inOrder(root.right, arr);
+        }
+        return arr;
     }
 }
