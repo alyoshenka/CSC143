@@ -1,3 +1,6 @@
+/**
+ * holds data for wearable devices
+ */
 public class Wearable {
     /** the device ranking */
     private int ranking;
@@ -25,6 +28,7 @@ public class Wearable {
     /**
      * Wearable constructor
      *
+     * @param ranking customer ranking
      * @param name company name
      * @param price device price
      * @param bodyLocation location device is worn
@@ -154,5 +158,43 @@ public class Wearable {
         return companyCountry;
     }
 
+    /**
+     * gets a CSV formatted string of the object
+     *
+     * @return the object in CSV form
+     */
+    public String toCSV(){
+        String val = "";
+        val += ranking + ",";
+        val += name + ",";
+        val += price + ",";
+        val += bodyLocation + ",";
+        val += category + ",";
+        val += companyName + ",";
+        val += companyURL + ",";
+        val += companyMappingLocation + ",";
+        val += companyCity + ",";
+        val += companyState + ",";
+        val += companyCountry;
 
+        return val;
+    }
+
+    /**
+     * gets a display value of the object with price, company name, and device name
+     *
+     * @return a display view of the object
+     */
+    public String toDisplay(){
+        String val = "";
+        if(price == -99.99){
+            val += "$: none";
+        }else{
+            val += String.format("$%.2f", price);
+        }
+        val += " ~By: " + companyName;
+        val += " ~Device: " + name;
+
+        return val;
+    }
 }

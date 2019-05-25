@@ -1,6 +1,8 @@
 import java.io.*;
-import java.nio.Buffer;
 
+/**
+ * manages the Wearables and file IO
+ */
 public class WearableManager {
     /** all the wearables */
     private Wearable[] wearables;
@@ -23,6 +25,7 @@ public class WearableManager {
             /** take off csv label line */
             String line = br.readLine();
             /** add to array */
+            int i = 1;
             while(null != (line = br.readLine())){
                 String[] sections = line.split("@");
                 if(sections.length != 11){
@@ -36,6 +39,7 @@ public class WearableManager {
             br.close();
         } catch(Exception e){
             // deal with error
+            wearables = new Wearable[0];
         }
 
         rankings = new BinarySearch<>();
@@ -92,10 +96,26 @@ public class WearableManager {
      * generates a CSV file with the data
      *
      * @param positions the positions to put in
-     * @param fileName the file to save it in
+     * @param fileName the file to save it in, no extension
      * @return whether saving was successful, ie valid file and not null positions
      */
     public boolean generateCSV(int[] positions, String fileName){
-        return false;
+        try{
+            FileWriter fileOut = new FileWriter(fileName + ".txt");
+            BufferedWriter bufOut = new BufferedWriter(fileOut);
+            String val = "";
+            for(int i : positions){
+                bufOut.write(wearables[i].toCSV());
+                bufOut.newLine();
+            }
+            bufOut.flush();
+            bufOut.close();
+            fileOut.flush();
+            fileOut.close();
+        }
+        catch(Exception e){
+            return false;
+        }
+        return true;
     }
 }

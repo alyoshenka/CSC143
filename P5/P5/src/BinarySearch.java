@@ -1,8 +1,20 @@
+/**
+ * manages a binary tree with no duplicate entries
+ *
+ * @param <E> the type of data to hold
+ */
 public class BinarySearch<E extends Comparable<E>> {
 
+    /** the base node of the tree */
     private Node<E> overallRoot;
+    /** the number of items in the tree */
     private int size;
 
+    /**
+     * a node of the tree
+     *
+     * @param <E> the type of data to hold
+     */
     private static class Node<E>{
         /** data this node holds */
         public E data;
@@ -45,10 +57,12 @@ public class BinarySearch<E extends Comparable<E>> {
         if(null == overallRoot){
             overallRoot = new Node<>();
             overallRoot.data = item;
+            overallRoot.arrayPosition = arrPos;
+            size++;
         } else{
             add(item, arrPos, overallRoot);
         }
-        size++;
+
         return true;
     }
 
@@ -56,6 +70,7 @@ public class BinarySearch<E extends Comparable<E>> {
      * adds an item to the tree at a given node
      *
      * @param item the item to add
+     * @param arrPos the position of the item
      * @param root the node to add it at
      * @return the node modified
      */
@@ -93,6 +108,8 @@ public class BinarySearch<E extends Comparable<E>> {
      * gets an array of items in order from a node
      *
      * @param root the node to start at
+     * @param arr the array to modify
+     * @return the array to modify
      */
     private int[] inOrder(Node root, int[] arr){
         if(null != root){

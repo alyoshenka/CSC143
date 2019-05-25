@@ -1,8 +1,20 @@
+/**
+ * manages a binary tree with duplicate entries
+ *
+ * @param <E> the type of data to hold
+ */
 public class BinarySearchDuplicate<E extends Comparable<E>> {
 
+    /** the starting node of the tree */
     private NodeDuplicate<E> overallRoot;
+    /** the number of items in the tree */
     private int size;
 
+    /**
+     * a node of the tree
+     *
+     * @param <E> the type of data to hold
+     */
     private static class NodeDuplicate<E>{
         /** the duplicate item list */
         public NodeDuplicateList<E> items;
@@ -12,6 +24,29 @@ public class BinarySearchDuplicate<E extends Comparable<E>> {
         public NodeDuplicate<E> right;
         /** the size of the duplicate list */
         public int listSize;
+
+        /**
+         * manages the list of items
+         *
+         * @param <E> the type of data to hold
+         */
+        private static class NodeDuplicateList<E>{
+            /** the stored data */
+            public E data;
+            /** the data's array position */
+            public int arrayPosition;
+            /** the next node of data */
+            public NodeDuplicateList<E> next;
+
+            /**
+             * default constructor
+             */
+            public NodeDuplicateList(){
+                data = null;
+                next = null;
+                arrayPosition = -1;
+            }
+        }
 
         /**
          * duplicate node constructor
@@ -40,9 +75,9 @@ public class BinarySearchDuplicate<E extends Comparable<E>> {
                 }
                 NodeDuplicateList end = new NodeDuplicateList();
                 end.data = item;
+                end.arrayPosition = arrPos;
                 temp.next = end;
             }
-
             listSize++;
         }
 
@@ -62,24 +97,6 @@ public class BinarySearchDuplicate<E extends Comparable<E>> {
         }
     }
 
-    private static class NodeDuplicateList<E>{
-        /** the stored data */
-        public E data;
-        /** the data's array position */
-        public int arrayPosition;
-        /** the next node of data */
-        public NodeDuplicateList next;
-
-        /**
-         * default constructor
-         */
-        public NodeDuplicateList(){
-            data = null;
-            next = null;
-            arrayPosition = -1;
-        }
-    }
-
     /**
      * Binary Search constructor
      */
@@ -92,6 +109,7 @@ public class BinarySearchDuplicate<E extends Comparable<E>> {
      * adds an item to the tree
      *
      * @param item the item to add, must not be duplicate
+     * @param arrPos the position of the item to add
      * @return whether item was added successfully
      */
     public boolean add(E item, int arrPos){
@@ -111,8 +129,10 @@ public class BinarySearchDuplicate<E extends Comparable<E>> {
     /**
      * adds an item to the tree at a given node
      *
-     * @param item the item to ass
+     * @param item the item to add
+     * @param arrPos the array position of the item
      * @param root the node to add it at
+     * @return the node to continue from
      */
     private NodeDuplicate add(E item, int arrPos, NodeDuplicate<E> root){
         if(null == root){
@@ -130,7 +150,6 @@ public class BinarySearchDuplicate<E extends Comparable<E>> {
                 root.add(item, arrPos);
             }
         }
-        size++;
         return root;
     }
 
@@ -148,6 +167,8 @@ public class BinarySearchDuplicate<E extends Comparable<E>> {
      * gets an array of items in order from a node
      *
      * @param root the node to start at
+     * @param arr array to put items in
+     * @return array of items
      */
     private int[] inOrder(NodeDuplicate root, int[] arr){
         if(null != root){
