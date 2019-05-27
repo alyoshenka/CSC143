@@ -15,7 +15,7 @@ public class BinarySearchDuplicate<E extends Comparable<E>> {
      *
      * @param <E> the type of data to hold
      */
-    private static class NodeDuplicate<E>{
+    private static class NodeDuplicate<E extends Comparable<E>>{
         /** the duplicate item list */
         public NodeDuplicateList<E> items;
         /** the left node */
@@ -65,15 +65,15 @@ public class BinarySearchDuplicate<E extends Comparable<E>> {
          */
         public void add(E item, int arrPos){
             if(null == items){
-                items = new NodeDuplicateList<>();
+                items = new NodeDuplicateList<E>();
                 items.data = item;
                 items.arrayPosition = arrPos;
             } else {
-                NodeDuplicateList temp;
+                NodeDuplicateList<E> temp;
                 for(temp = items; temp.next != null; temp = temp.next){
                     // iterate to end
                 }
-                NodeDuplicateList end = new NodeDuplicateList();
+                NodeDuplicateList<E> end = new NodeDuplicateList<E>();
                 end.data = item;
                 end.arrayPosition = arrPos;
                 temp.next = end;
@@ -136,7 +136,7 @@ public class BinarySearchDuplicate<E extends Comparable<E>> {
      */
     private NodeDuplicate add(E item, int arrPos, NodeDuplicate<E> root){
         if(null == root){
-            root = new NodeDuplicate();
+            root = new NodeDuplicate<E>();
             root.add(item, arrPos);
         } else {
             /** compare value */
@@ -188,4 +188,5 @@ public class BinarySearchDuplicate<E extends Comparable<E>> {
         }
         return arr;
     }
+
 }

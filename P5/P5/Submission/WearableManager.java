@@ -103,7 +103,9 @@ public class WearableManager {
         try{
             FileWriter fileOut = new FileWriter(fileName + ".txt");
             BufferedWriter bufOut = new BufferedWriter(fileOut);
-            String val = "";
+            String val = "Ranking,Name,Price,BodyLocation,Category,"
+                    + "CompanyName,CompanyURL,CompanyMappingLocation,"
+                    + "CompanyCity,CompanyState,CompanyCountry\n";
             for(int i : positions){
                 bufOut.write(wearables[i].toCSV());
                 bufOut.newLine();

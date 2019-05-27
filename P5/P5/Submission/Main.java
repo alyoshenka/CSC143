@@ -18,27 +18,6 @@ public class Main {
         wm.generateCSV(prices, "Prices");
         wm.generateCSV(coNames, "CoNames");
 
-        /** get sorted data */
-        int[] top10Ranked = Arrays.copyOfRange(ranks, 0, 10);
-        int[] top20Prices = Arrays.copyOfRange(prices, 0,20);
-        int min, max;
-        for(min = 0; min < coNames.length; min++){
-            if(wm.getWearableAtIndex(coNames[min]).getCompanyName().compareTo("M") >= 0){
-                break;
-            }
-        }
-        for(max = coNames.length - 1; max >= 0; max--){
-            if(wm.getWearableAtIndex(coNames[max]).getCompanyName().startsWith("O")){
-                break;
-            }
-        }
-        int[] MtoO = Arrays.copyOfRange(coNames, min, max + 1);
-
-        /** display in files */
-        wm.generateCSV(top10Ranked, "Top10Ranked");
-        wm.generateCSV(top20Prices, "Top20Prices");
-        wm.generateCSV(MtoO, "MtoOCompanies");
-
         /** show by ranking */
         System.out.println("----- Rankings -----");
         for(int i = 0; i < ranks.length; i++){

@@ -165,19 +165,38 @@ public class Wearable {
      */
     public String toCSV(){
         String val = "";
-        val += ranking + ",";
-        val += name + ",";
-        val += price + ",";
-        val += bodyLocation + ",";
-        val += category + ",";
-        val += companyName + ",";
-        val += companyURL + ",";
-        val += companyMappingLocation + ",";
-        val += companyCity + ",";
-        val += companyState + ",";
-        val += companyCountry;
+        val += ranking + ",\"";
+        val += CSVCommas(name) + "\",";
+        val += price + ",\"";
+        val += CSVCommas(bodyLocation) + "\",\"";
+        val += CSVCommas(category) + "\",\"";
+        val += CSVCommas(companyName) + "\",\"";
+        val += CSVCommas(companyURL) + "\",\"";
+        val += CSVCommas(companyMappingLocation) + "\",\"";
+        val += CSVCommas(companyCity) + "\",\"";
+        val += CSVCommas(companyState) + "\",\"";
+        val += CSVCommas(companyCountry) + "\"";
 
         return val;
+    }
+
+    /**
+     * inserts commas at appropriate places for csv file
+     *
+     * @param orig the original string to check
+     * @return the string modified for csv
+     */
+    private String CSVCommas(String orig){
+        if(orig.contains("\"")){
+            StringBuilder sb = new StringBuilder(orig);
+            int idx = sb.indexOf("\"");
+            while(idx != -1) {
+                sb.insert(idx, "\"");
+                idx = sb.indexOf("\"", idx + 2);
+            }
+            orig = sb.toString();
+        }
+        return orig;
     }
 
     /**
