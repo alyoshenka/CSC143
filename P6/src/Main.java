@@ -8,6 +8,8 @@ public class Main {
     private DrawFractal display;
 
     public static void main(String[] args) {
-        // SettingsDialogue s = new SettingsDialogue();
+        FractalDataGenerator dat = new FractalDataGenerator();
+        DrawFractal display = new DrawFractal(dat);
+        SettingsDialogue s = new SettingsDialogue(dat);
     }
 }

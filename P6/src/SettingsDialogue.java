@@ -49,7 +49,7 @@ public class SettingsDialogue extends JFrame{
 
         // window
         frame = new JFrame("Fractals");
-        frame.setSize(400, 300);
+        frame.setSize(300, 200);
         frame.setResizable(false);
         frame.setVisible(true); // do i need?
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,30 +60,43 @@ public class SettingsDialogue extends JFrame{
         goButton = new JButton("Draw Fractal");
         mainButton.setBackground(baseColor);
         endButton.setBackground(endColor);
+        mainButton.setBounds(20, 20, 100, 30);
+        endButton.setBounds(160, 20, 100, 30);
+        goButton.setBounds(80, 100, 120, 40);
         mainButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                baseColor = JColorChooser.showDialog(null, "Choose a base color", Color.green);
+                Color newColor = JColorChooser.showDialog(null, "Choose a base color", Color.green);
+                if(null != newColor){
+                    baseColor = newColor;
+                }
                 mainButton.setBackground(baseColor);
+                sub.setData(ratio, recursionDepth, baseColor, endColor);
             }
         });
         endButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                endColor = JColorChooser.showDialog(null, "Choose an end color", Color.pink);
+                Color newColor = JColorChooser.showDialog(null, "Choose an end color", Color.pink);
+                if(null != newColor) {
+                    endColor = newColor;
+                }
                 endButton.setBackground(endColor);
+                sub.setData(ratio, recursionDepth, baseColor, endColor);
             }
         });
         goButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.printf("%s, %s, %s, %s", baseColor, endColor, recursionDepth, ratio);
+                sub.notifyObservers();
             }
         });
 
         // combo boxes
         recursionBox = new JComboBox();
         ratioBox = new JComboBox();
+        recursionBox.setBounds(40, 60, 50, 20);
+        ratioBox.setBounds(180, 60, 50, 20);
         for(int i = 2; i <= 10; i++){
             recursionBox.addItem(i);
         }
@@ -94,18 +107,20 @@ public class SettingsDialogue extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 recursionDepth = (int)recursionBox.getItemAt(recursionBox.getSelectedIndex());
+                sub.setData(ratio, recursionDepth, baseColor, endColor);
             }
         });
         ratioBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ratio = (int)ratioBox.getItemAt(ratioBox.getSelectedIndex());
+                sub.setData(ratio, recursionDepth, baseColor, endColor);
             }
         });
 
         // panel
         panel = new JPanel();
-        // panel.setLayout(new LayoutManager());
+        panel.setLayout(null);
         panel.add(mainButton);
         panel.add(endButton);
         panel.add(goButton);

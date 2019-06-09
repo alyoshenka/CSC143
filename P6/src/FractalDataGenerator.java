@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.awt.Color;
 
+/** settings gui */
 public class FractalDataGenerator implements Subject {
 
     /** the objects subscribed to this */
@@ -19,7 +20,8 @@ public class FractalDataGenerator implements Subject {
      */
     public FractalDataGenerator(){
         listeners = new ArrayList<>();
-        ratio = recDepth = 0;
+        ratio = 40; // ?
+        recDepth = 2; // ?
         baseColor = Color.green; // default
         endColor = Color.pink; // default
     }
@@ -51,14 +53,37 @@ public class FractalDataGenerator implements Subject {
      * {@inheritDoc}
      */
     public void setData(double childRatio, int recDepth, Color baseColor, Color endColor){
-        // not sure
+        ratio = childRatio;
+        this.recDepth = recDepth;
+        this.baseColor = baseColor;
+        this.endColor = endColor;
     }
 
     /**
      * {@inheritDoc}
      */
     public ArrayList<FractalObject> getData(){
-        // not sure
-        return null;
+        return generateObjects();
     }
+
+    /**
+     * makes the list of objects
+     *
+     * @return the list of objects
+     */
+    private ArrayList<FractalObject> generateObjects(){
+        ArrayList<FractalObject> objects = new ArrayList<>();
+
+        objects.add(new Circle(150, 200, 50, Color.red));
+
+        // base
+        for(int i = 0; i < recDepth; i++){
+
+        }
+
+
+        return objects;
+    }
+
+
 }
