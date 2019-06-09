@@ -1,5 +1,9 @@
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JFrame;
+import javax.swing.JButton;
+import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -36,7 +40,7 @@ public class SettingsDialogue extends JFrame{
     /**
      * default constructor
      */
-    public SettingsDialogue(){
+    public SettingsDialogue(Subject sub){
         // defaults
         baseColor = Color.green;
         endColor = Color.pink;
