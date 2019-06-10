@@ -30,8 +30,9 @@ public interface Subject {
      * @param recDepth number of recursions
      * @param baseColor base fractal color
      * @param endColor end fractal color
+     * @param angle the angle in degrees
      */
-    void setData(double childRatio, int recDepth, Color baseColor, Color endColor);
+    void setData(double childRatio, int recDepth, Color baseColor, Color endColor, int angle);
 
     /**
      * gets a list of generated FractalObjects

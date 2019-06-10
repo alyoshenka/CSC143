@@ -1,6 +1,7 @@
 import java.awt.Graphics;
 import java.awt.Color;
 
+/** circle drawing */
 public class Circle implements FractalObject{
     /** the x coordinate */
     private int x;
@@ -67,6 +68,8 @@ public class Circle implements FractalObject{
      */
     public void draw(Graphics g){
         g.setColor(color);
-        g.drawOval(x, y, radius, radius);
+        g.fillOval(x, y, radius, radius);
+        g.setColor(Color.BLACK);
+        g.drawOval(x, y, 2, 2);
     }
 }

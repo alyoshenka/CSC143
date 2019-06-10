@@ -1,12 +1,14 @@
-import javax.swing.JPanel;
 import javax.swing.JFrame;
-import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JColorChooser;
+import javax.swing.JLabel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/** setting dialogue */
 public class SettingsDialogue extends JFrame{
     // window
     /** the main drawing frame */
@@ -23,6 +25,8 @@ public class SettingsDialogue extends JFrame{
     private int recursionDepth;
     /** ratio of child to parent radius */
     private int ratio;
+    /** offset angle for recursion */
+    private int angle;
 
     // data helpers
     /** main color button */
@@ -30,15 +34,26 @@ public class SettingsDialogue extends JFrame{
     /** end color button */
     private JButton endButton;
     /** range for recursion depth */
-    private JComboBox recursionBox;
+    private JComboBox<Integer> recursionBox;
     /** range for radius ratio */
-    private JComboBox ratioBox;
+    private JComboBox<Integer> ratioBox;
+    /** angle for recursion */
+    private JComboBox<Integer> angleBox;
+    /** recursion label */
+    private JLabel recursionLabel;
+    /** ratio label */
+    private JLabel ratioLabel;
+    /** angle label */
+    private JLabel angleLabel;
+
 
     /** the button to draw the fractal */
     private JButton goButton;
 
     /**
      * default constructor
+     *
+     * @param sub the Subject
      */
     public SettingsDialogue(Subject sub){
         // defaults
@@ -46,10 +61,12 @@ public class SettingsDialogue extends JFrame{
         endColor = Color.pink;
         recursionDepth = 2;
         ratio = 40;
+        recursionDepth = 2;
+        angle = 30;
 
         // window
         frame = new JFrame("Fractals");
-        frame.setSize(300, 200);
+        frame.setSize(300, 300);
         frame.setResizable(false);
         frame.setVisible(true); // do i need?
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,7 +79,7 @@ public class SettingsDialogue extends JFrame{
         endButton.setBackground(endColor);
         mainButton.setBounds(20, 20, 100, 30);
         endButton.setBounds(160, 20, 100, 30);
-        goButton.setBounds(80, 100, 120, 40);
+        goButton.setBounds(80, 200, 120, 40);
         mainButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -71,7 +88,7 @@ public class SettingsDialogue extends JFrame{
                     baseColor = newColor;
                 }
                 mainButton.setBackground(baseColor);
-                sub.setData(ratio, recursionDepth, baseColor, endColor);
+                sub.setData(ratio, recursionDepth, baseColor, endColor, angle);
             }
         });
         endButton.addActionListener(new ActionListener() {
@@ -82,7 +99,7 @@ public class SettingsDialogue extends JFrame{
                     endColor = newColor;
                 }
                 endButton.setBackground(endColor);
-                sub.setData(ratio, recursionDepth, baseColor, endColor);
+                sub.setData(ratio, recursionDepth, baseColor, endColor, angle);
             }
         });
         goButton.addActionListener(new ActionListener() {
@@ -93,28 +110,46 @@ public class SettingsDialogue extends JFrame{
         });
 
         // combo boxes
-        recursionBox = new JComboBox();
-        ratioBox = new JComboBox();
-        recursionBox.setBounds(40, 60, 50, 20);
-        ratioBox.setBounds(180, 60, 50, 20);
+        recursionBox = new JComboBox<Integer>();
+        ratioBox = new JComboBox<Integer>();
+        angleBox = new JComboBox<Integer>();
+        recursionLabel = new JLabel("Recursion");
+        ratioLabel = new JLabel("Ratio");
+        angleLabel = new JLabel("Angle");
+        recursionBox.setBounds(20, 110, 70, 20);
+        ratioBox.setBounds(110, 110, 70, 20);
+        angleBox.setBounds(200, 110, 70, 20);
+        recursionLabel.setBounds(20, 90, 70, 20);
+        ratioLabel.setBounds(110, 90, 70, 20);
+        angleLabel.setBounds(200, 90, 70, 20);
         for(int i = 2; i <= 10; i++){
             recursionBox.addItem(i);
         }
         for(int i = 40; i <= 70; i += 5){
             ratioBox.addItem(i);
         }
+        for(int i = 30; i <= 60; i += 5){
+            angleBox.addItem(i);
+        }
         recursionBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 recursionDepth = (int)recursionBox.getItemAt(recursionBox.getSelectedIndex());
-                sub.setData(ratio, recursionDepth, baseColor, endColor);
+                sub.setData(ratio, recursionDepth, baseColor, endColor, angle);
             }
         });
         ratioBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ratio = (int)ratioBox.getItemAt(ratioBox.getSelectedIndex());
-                sub.setData(ratio, recursionDepth, baseColor, endColor);
+                sub.setData(ratio, recursionDepth, baseColor, endColor, angle);
+            }
+        });
+        angleBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                angle = (int)angleBox.getItemAt(angleBox.getSelectedIndex());
+                sub.setData(ratio, recursionDepth, baseColor, endColor, angle);
             }
         });
 
@@ -126,6 +161,10 @@ public class SettingsDialogue extends JFrame{
         panel.add(goButton);
         panel.add(recursionBox);
         panel.add(ratioBox);
+        panel.add(angleBox);
+        panel.add(recursionLabel);
+        panel.add(ratioLabel);
+        panel.add(angleLabel);
 
         frame.add(panel);
         frame.setVisible(true);

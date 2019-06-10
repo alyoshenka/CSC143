@@ -1,7 +1,7 @@
-import javax.swing.JFrame;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+/** drawing display */
 public class DrawFractal implements Observer {
 
     /** the object to listen to */

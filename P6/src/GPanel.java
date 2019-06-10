@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/** graphics drawing panel */
 public class GPanel extends JPanel {
 
     /** the frame to draw on */
@@ -14,7 +15,7 @@ public class GPanel extends JPanel {
      */
     public GPanel(){
         frame = new JFrame("Drawing");
-        frame.setSize(300, 200);
+        frame.setSize(600, 500);
         frame.setResizable(false);
         frame.setVisible(true); // do i need?
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -34,10 +35,13 @@ public class GPanel extends JPanel {
         for(FractalObject shape : objects){
             shape.draw(g);
         }
-
-        g.drawOval(10, 10, 10, 10);
     }
 
+    /**
+     * draw the shapes
+     *
+     * @param objects the shapes to draw
+     */
     public void draw(ArrayList<FractalObject> objects){
         this.objects = objects;
         repaint();
