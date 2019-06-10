@@ -69,7 +69,5 @@ public class Circle implements FractalObject{
     public void draw(Graphics g){
         g.setColor(color);
         g.fillOval(x, y, radius, radius);
-        g.setColor(Color.BLACK);
-        g.drawOval(x, y, 2, 2);
     }
 }

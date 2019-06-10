@@ -32,13 +32,14 @@ public class FractalDataGenerator implements Subject {
     public FractalDataGenerator(){
         listeners = new ArrayList<>();
         objects = new ArrayList<>();
+        /** initialize to defaults */
         ratio = 40;
         recDepth = 2;
-        angle = 0;
-        baseColor = Color.green; // default
-        endColor = Color.pink; // default
+        angle = Math.toRadians(30);
+        baseColor = Color.green;
+        endColor = Color.pink;
         startX = 250;
-        startY = 300;
+        startY = 260;
         startRad = 100;
     }
 
@@ -90,7 +91,9 @@ public class FractalDataGenerator implements Subject {
      */
     private ArrayList<FractalObject> generateObjects(){
         objects.clear();
-        getNext(startX, startY, startRad, recDepth, angle);
+        double offset = Math.toRadians(90);
+        getNext(startX, startY, startRad, recDepth, angle + offset); // right
+        getNext(startX, startY, startRad, recDepth, offset - angle); // left
         return objects;
     }
 
@@ -104,23 +107,21 @@ public class FractalDataGenerator implements Subject {
      * @param startAngle the angle to draw at
      * @return if there will be another recursion
      */
-    private boolean getNext(double startX, double startY, int startRad, int recDepth, double startAngle) {
-        System.out.println(Math.toDegrees(startAngle));
+    private boolean getNext(double startX, double startY, double startRad, int recDepth, double startAngle) {
         if (recDepth <= 0 || startRad < 1) {
             return false;
         } else if (1 == recDepth) {
-            objects.add(new Circle((int) (startX - 0.5 * startRad), (int) (startY - 0.5 * startRad), startRad, endColor));
+            objects.add(new Circle((int) (startX - 0.5 * startRad), (int) (startY - 0.5 * startRad), (int)startRad, endColor));
             return false;
         } else {
-            objects.add(new Circle((int) (startX - 0.5 * startRad), (int) (startY - 0.5 * startRad), startRad, baseColor));
-            double deltaX = startRad * Math.cos(startAngle);
-            double deltaY = startRad * Math.sin(startAngle);
+            objects.add(new Circle((int) (startX - 0.5 * startRad), (int) (startY - 0.5 * startRad), (int)startRad, baseColor));
+            double deltaX = startRad / 2 * Math.cos(startAngle);
+            double deltaY = startRad / 2 * Math.sin(startAngle);
             startRad *= (ratio / 100.0);
-            deltaX += startRad * Math.cos(startAngle);
-            deltaY += startRad * Math.sin(startAngle);
-            startAngle += Math.toRadians(45);
-            getNext(startX + deltaX, startY - deltaY, startRad, recDepth - 1, startAngle); // right
-            getNext(startX - deltaX, startY - deltaY, startRad, recDepth - 1, startAngle); // left
+            deltaX += startRad / 2 * Math.cos(startAngle);
+            deltaY += startRad / 2 * Math.sin(startAngle);
+            getNext(startX + deltaX, startY - deltaY, startRad, recDepth - 1, startAngle + angle); // right
+            getNext(startX + deltaX, startY - deltaY, startRad, recDepth - 1, startAngle - angle); // left
             return true;
         }
     }

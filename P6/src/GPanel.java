@@ -15,7 +15,7 @@ public class GPanel extends JPanel {
      */
     public GPanel(){
         frame = new JFrame("Drawing");
-        frame.setSize(600, 500);
+        frame.setSize(550, 400);
         frame.setResizable(false);
         frame.setVisible(true); // do i need?
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
